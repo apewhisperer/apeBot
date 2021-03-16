@@ -1,0 +1,4 @@
+Tue Mar 16 21:32:16 CET 2021 !tip augury
+Tue Mar 16 21:32:19 CET 2021 !d20
+Tue Mar 16 21:32:56 CET 2021 !d5
+Tue Mar 16 21:43:10 CET 2021 !tip locate object
