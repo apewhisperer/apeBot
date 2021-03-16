@@ -33,6 +33,12 @@ public class Commands {
                         .createMessage("value required").block();
             }
         });
+        commands.put("wildsurge", event -> {
+            event.getMessage()
+                    .getChannel().block()
+                    .createEmbed(embed -> embed.setColor(Color.DARK_GOLDENROD)
+                            .setDescription(WildMagicSurge.rollOnTable())).subscribe();
+        });
         commands.put("bony", event -> {
             event.getMessage()
                     .getChannel().block()
@@ -49,7 +55,9 @@ public class Commands {
                     .createEmbed(embed -> embed.setColor(Color.DARK_GOLDENROD)
                             .setTitle("Commands:")
                             .addField(Help.rollCode(), Help.rollHelp(), false)
-                            .addField(Help.tipCode(), Help.tipHelp(), false)).subscribe();
+                            .addField(Help.tipCode(), Help.tipHelp(), false)
+                            .addField(Help.surgeCode(), Help.surgeHelp(), false)).subscribe();
+
         });
         commands.put("hes kinda dumb", event -> {
             event.getMessage()
