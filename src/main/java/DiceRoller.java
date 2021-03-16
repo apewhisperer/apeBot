@@ -5,8 +5,9 @@ public class DiceRoller {
 
     public static String rolld20(String modifier) {
 
-        ArrayList<Character> list = new ArrayList<>();
+        Log.registerEvent("!d", modifier);
 
+        ArrayList<Character> list = new ArrayList<>();
         char[] chars = modifier.toCharArray();
 
         for (char c : chars) {

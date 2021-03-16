@@ -21,7 +21,7 @@ public class Events {
     }
 
     public static void onReady(ReadyEvent event, GatewayDiscordClient client) {
-        client.updatePresence(Presence.idle(Activity.listening("!help"))).subscribe();
+        client.updatePresence(Presence.online(Activity.listening("!help"))).subscribe();
         final User self = event.getSelf();
         System.out.println(String.format(
                 "Logged in as %s#%s", self.getUsername(), self.getDiscriminator()
