@@ -23,13 +23,18 @@ public class DiceRoller {
         if (modifier.length() > list.size()) {
             operation = modifier.substring(list.size());
         }
-        if (Integer.parseInt(dice) > 0) {
-            Random random = new Random();
-            int roll = random.nextInt(Integer.parseInt(dice)) + 1;
-            int evaluateResult = Integer.parseInt(evaluate(operation)) + roll;
-            return "```" + evaluateResult + "```";
-        } else
-            return "value required";
+        if (!dice.equals("")) {
+            if (Integer.parseInt(dice) > 1) {
+                Random random = new Random();
+                int roll = random.nextInt(Integer.parseInt(dice)) + 1;
+                int evaluateResult = Integer.parseInt(evaluate(operation)) + roll;
+                return "```" + evaluateResult + "```";
+            } else if (Integer.parseInt(dice) == 1) {
+                return "nice one";
+            }
+                return "value required";
+        }
+        return "illegal input";
     }
 
     public static String evaluate(final String str) {

@@ -9,10 +9,16 @@ import java.util.Map;
 
 public class Events {
 
-    public static void onMessageCreated(MessageCreateEvent event, Map<String, Command> commands) {
+    public static void onMessageCreated(MessageCreateEvent event, Map<String, ExecuteInterface> commands) {
+
         final String content = event.getMessage().getContent();
 
-        for (final Map.Entry<String, Command> entry : commands.entrySet()) {
+        if (event.getMessage().getContent().contains("820365062300500059")) {
+            event.getMessage()
+                    .getChannel().block()
+                    .createMessage("!help").block();
+        }
+        for (final Map.Entry<String, ExecuteInterface> entry : commands.entrySet()) {
             if (content.startsWith('!' + entry.getKey())) {
                 entry.getValue().execute(event);
                 break;

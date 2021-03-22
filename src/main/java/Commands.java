@@ -5,9 +5,9 @@ import java.util.Map;
 
 public class Commands {
 
-    public static Map<String, Command> getCommands() {
+    public static Map<String, ExecuteInterface> getCommands() {
 
-        final Map<String, Command> commands = new HashMap<>();
+        final Map<String, ExecuteInterface> commands = new HashMap<>();
 
         commands.put("tip", event -> {
             if (event.getMessage().getContent().length() > 4) {

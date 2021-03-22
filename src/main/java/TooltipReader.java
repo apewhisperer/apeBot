@@ -57,7 +57,11 @@ public class TooltipReader {
                 .replaceAll("<em>", "")
                 .replaceAll("</em>", "")
                 .replaceAll("<strong>", "**")
-                .replaceAll("</strong>", "**");
+                .replaceAll("</strong>", "**")
+                .replaceAll("â€™", "'")
+                .replaceAll("â€”", "-")
+                .replaceAll("â€“", "–")
+                .replaceAll("â€˘", "•");
         tooltip = tooltip.substring(0, tooltip.indexOf("Spell Lists"));
         tooltip = tooltip.substring(0, tooltip.lastIndexOf("**"));
         return trimTo2000Chars(tooltip);

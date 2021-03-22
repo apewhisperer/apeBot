@@ -2,3 +2,105 @@ Tue Mar 16 21:32:16 CET 2021 !tip augury
 Tue Mar 16 21:32:19 CET 2021 !d20
 Tue Mar 16 21:32:56 CET 2021 !d5
 Tue Mar 16 21:43:10 CET 2021 !tip locate object
+Tue Mar 16 21:47:25 CET 2021 !tip kill
+Tue Mar 16 21:47:44 CET 2021 !tip speak with plants
+Tue Mar 16 21:47:53 CET 2021 !tip speak with animals
+Tue Mar 16 21:54:06 CET 2021 !tip augury
+Tue Mar 16 21:58:17 CET 2021 !d20
+Tue Mar 16 21:58:26 CET 2021 !tip augury
+Tue Mar 16 21:59:32 CET 2021 !tip agag'gag
+Tue Mar 16 22:38:47 CET 2021 !tip control water
+Tue Mar 16 22:39:42 CET 2021 !d20
+Tue Mar 16 22:39:50 CET 2021 !tip control water
+Wed Mar 17 00:07:43 CET 2021 !tip augury
+Wed Mar 17 00:07:44 CET 2021 !tip augury
+Wed Mar 17 00:09:21 CET 2021 !d20
+Wed Mar 17 00:09:25 CET 2021 !tip augury
+Wed Mar 17 00:09:39 CET 2021 !tip control water
+Wed Mar 17 00:19:44 CET 2021 !tip crown of stars
+Wed Mar 17 00:44:13 CET 2021 !d20
+Wed Mar 17 10:12:48 CET 2021 !tip raise dead
+Wed Mar 17 10:13:04 CET 2021 !tip wish will
+Wed Mar 17 10:13:30 CET 2021 !tip wish
+Wed Mar 17 10:13:42 CET 2021 !tip will
+Wed Mar 17 10:23:54 CET 2021 !tip divination
+Wed Mar 17 10:27:54 CET 2021 !d20
+Wed Mar 17 10:28:02 CET 2021 !tip raise dead
+Wed Mar 17 10:59:47 CET 2021 !davet
+Wed Mar 17 11:47:23 CET 2021 !d20
+Wed Mar 17 11:47:31 CET 2021 !tip raise dead
+Wed Mar 17 11:59:40 CET 2021 !d2
+Wed Mar 17 11:59:57 CET 2021 !tip healing word
+Wed Mar 17 17:01:02 CET 2021 !tip raise dead
+Wed Mar 17 17:01:44 CET 2021 !tip animate dead
+Wed Mar 17 17:02:06 CET 2021 !d45
+Wed Mar 17 17:03:39 CET 2021 !tip on off
+Wed Mar 17 17:04:00 CET 2021 !tip revivify
+Wed Mar 17 17:04:48 CET 2021 !djdjd
+Wed Mar 17 17:55:27 CET 2021 !d23
+Wed Mar 17 17:55:34 CET 2021 !d-=3
+Wed Mar 17 17:55:37 CET 2021 !d-2-2
+Wed Mar 17 17:55:42 CET 2021 !d00
+Wed Mar 17 17:55:45 CET 2021 !d00-33
+Wed Mar 17 19:06:04 CET 2021 !tip will
+Wed Mar 17 19:06:20 CET 2021 !d4
+Wed Mar 17 19:07:24 CET 2021 !tip reanimate
+Wed Mar 17 19:08:21 CET 2021 !tip eldritch blast
+Thu Mar 18 19:02:34 CET 2021 !d20
+Thu Mar 18 19:02:39 CET 2021 !tip mirror image
+Thu Mar 18 19:10:23 CET 2021 !tip shield of faith
+Thu Mar 18 19:10:52 CET 2021 !tip sacred flame
+Thu Mar 18 19:11:04 CET 2021 !tip spiritial weapon
+Thu Mar 18 19:11:14 CET 2021 !tip spiritual weapon
+Thu Mar 18 19:11:27 CET 2021 !tip invoke duplicity
+Thu Mar 18 19:19:40 CET 2021 !tip disguise self
+Thu Mar 18 20:32:46 CET 2021 !d20+4
+Thu Mar 18 20:47:03 CET 2021 !d10
+Thu Mar 18 20:47:57 CET 2021 !d20+4
+Thu Mar 18 21:16:27 CET 2021 !d20+3
+Thu Mar 18 21:17:24 CET 2021 !d20+4
+Thu Mar 18 21:18:35 CET 2021 !d20+2
+Thu Mar 18 21:28:00 CET 2021 !d20+2
+Thu Mar 18 21:29:42 CET 2021 !d20+4
+Thu Mar 18 22:29:49 CET 2021 !tip guidance
+Thu Mar 18 22:31:54 CET 2021 !d20+2
+Thu Mar 18 22:38:39 CET 2021 !d20+2
+Thu Mar 18 23:24:11 CET 2021 !d20+3
+Thu Mar 18 23:27:22 CET 2021 !d20+2
+Thu Mar 18 23:39:46 CET 2021 !d20+3
+Thu Mar 18 23:42:27 CET 2021 !tip command
+Thu Mar 18 23:47:45 CET 2021 !tip shield of faith
+Fri Mar 19 00:00:27 CET 2021 !tip bless
+Fri Mar 19 00:22:37 CET 2021 !d20+2
+Fri Mar 19 00:31:17 CET 2021 !tip healing word
+Fri Mar 19 00:31:38 CET 2021 !d20+4
+Fri Mar 19 00:32:18 CET 2021 !tip bane
+Fri Mar 19 00:33:33 CET 2021 !d20
+Fri Mar 19 00:41:46 CET 2021 !d20
+Fri Mar 19 00:41:53 CET 2021 !d4
+Fri Mar 19 00:41:56 CET 2021 !d20
+Fri Mar 19 00:41:58 CET 2021 !d4
+Fri Mar 19 00:42:13 CET 2021 !d4
+Fri Mar 19 00:52:09 CET 2021 !d20
+Fri Mar 19 00:52:11 CET 2021 !d4
+Fri Mar 19 00:52:13 CET 2021 !d20
+Fri Mar 19 00:53:44 CET 2021 !tip sleep
+Fri Mar 19 00:59:24 CET 2021 !d20
+Fri Mar 19 00:59:25 CET 2021 !d20
+Fri Mar 19 01:00:49 CET 2021 !d4
+Fri Mar 19 16:58:02 CET 2021 !wildsurge
+Sat Mar 20 00:31:31 CET 2021 !tip thaumaturgy
+Sat Mar 20 00:36:39 CET 2021 !tip augury
+Sat Mar 20 00:42:29 CET 2021 !tip thaumaturgy
+Sat Mar 20 00:42:42 CET 2021 !tip whatever
+Sat Mar 20 00:42:51 CET 2021 !tip bane
+Sat Mar 20 00:43:00 CET 2021 !tip dispel magic
+Sat Mar 20 00:43:16 CET 2021 !tip control water
+Sat Mar 20 21:49:45 CET 2021 !tip u
+Sat Mar 20 23:13:19 CET 2021 !d2
+Sat Mar 20 23:15:18 CET 2021 !d2
+Sat Mar 20 23:15:18 CET 2021 !d2
+Sat Mar 20 23:15:35 CET 2021 !d2020
+Sun Mar 21 00:36:25 CET 2021 !d2
+Sun Mar 21 01:02:09 CET 2021 !d2
+Sun Mar 21 01:02:20 CET 2021 !tip raise dead

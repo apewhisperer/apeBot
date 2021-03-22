@@ -15,11 +15,12 @@ public class Help {
     public static String rollHelp() {
         return "- rolls a [value] sided dice and performs a desired operation(example: **!d20+5**)";
     }
+
     public static String surgeCode() {
         return "!wildsurge";
     }
 
     public static String surgeHelp() {
-        return "- generates a random magical effect from the Wild Magic Surge Table (example: **!wildsurge**)";
+        return "- generates a random magical effect from the table (example: **!wildsurge**)";
     }
 }

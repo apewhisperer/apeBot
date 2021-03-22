@@ -6,7 +6,7 @@ import discord4j.core.event.domain.message.MessageCreateEvent;
 import java.util.Map;
 
 public class DiscordBot {
-    private static Map<String, Command> commands;
+    private static Map<String, ExecuteInterface> commands;
 
     static {
         commands = Commands.getCommands();

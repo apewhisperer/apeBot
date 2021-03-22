@@ -13,7 +13,7 @@ public class WildMagicSurge {
         switch (roll) {
             case 1:
             case 2:
-            return "Roll on this table at the start of each of your turns for the next minute, ignoring this result on subsequent rolls.";
+                return "Roll on this table at the start of each of your turns for the next minute, ignoring this result on subsequent rolls.";
             case 3:
             case 4:
                 return "For the next minute, you can see any invisible creature if you have line of sight to it.";
