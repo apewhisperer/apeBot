@@ -6,7 +6,7 @@ import discord4j.core.event.domain.message.MessageCreateEvent;
 import java.util.Map;
 
 public class DiscordBot {
-    private static Map<String, ExecuteInterface> commands;
+    private static final Map<String, ExecuteInterface> commands;
 
     static {
         commands = Commands.getCommands();
@@ -14,7 +14,7 @@ public class DiscordBot {
 
     public static void main(String[] args) {
 
-        GatewayDiscordClient client = DiscordClientBuilder.create("ODIwMzY1MDYyMzAwNTAwMDU5.YE0GgA.keeOF0o4IXi-mUjxnkz37GDsBPQ")
+        GatewayDiscordClient client = DiscordClientBuilder.create("ODIwMzY1MDYyMzAwNTAwMDU5.YE0GgA.mCpuBe4HHBxipUVFWbSlOfxzE7M")
                 .build()
                 .login()
                 .block();
