@@ -14,7 +14,7 @@ public class DiscordBot {
 
     public static void main(String[] args) {
 
-        GatewayDiscordClient client = DiscordClientBuilder.create("")
+        GatewayDiscordClient client = DiscordClientBuilder.create("TOKEN")
                 .build()
                 .login()
                 .block();
