@@ -6,7 +6,7 @@ import discord4j.core.event.domain.message.MessageCreateEvent;
 import java.util.Map;
 
 public class DiscordBot {
-    private static final Map<String, ExecuteInterface> commands;
+    private static final Map<String, IExecute> commands;
 
     static {
         commands = Commands.getCommands();
@@ -14,20 +14,24 @@ public class DiscordBot {
 
     public static void main(String[] args) {
 
-        GatewayDiscordClient client = DiscordClientBuilder.create("TOKEN")
+        GatewayDiscordClient client = DiscordClientBuilder.create("ODIwMzY1MDYyMzAwNTAwMDU5.YE0GgA.PRGZHhTF6YEfuyraDPYQz3n492k")
                 .build()
                 .login()
                 .block();
 
+        assert client != null;
+        run(client);
+    }
+
+    private static void run(GatewayDiscordClient client) {
+
         client.getEventDispatcher().on(ReadyEvent.class)
-                .subscribe(event -> {
-                    Events.onReady(event, client);
-                });
+                .subscribe(event -> Events.onReady(event, client));
 
         client.getEventDispatcher().on(MessageCreateEvent.class)
-                .subscribe(event -> {
-                    Events.onMessageCreated(event, commands);
-                });
+                .map(MessageCreateEvent::getMessage)
+                .filter(message -> message.getAuthor().map(user -> !user.isBot()).orElse(false))
+                .subscribe(message -> Events.onMessageCreated(message, commands));
 
         client.onDisconnect().block();
     }

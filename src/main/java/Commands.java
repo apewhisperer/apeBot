@@ -2,56 +2,45 @@ import discord4j.rest.util.Color;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class Commands {
 
-    public static Map<String, ExecuteInterface> getCommands() {
+    public static Map<String, IExecute> getCommands() {
 
-        final Map<String, ExecuteInterface> commands = new HashMap<>();
+        final Map<String, IExecute> commands = new HashMap<>();
 
         commands.put("tip", event -> {
-            if (event.getMessage().getContent().length() > 4) {
-                event.getMessage()
-                        .getChannel().block()
+            if (event.getContent().length() > 4) {
+                Objects.requireNonNull(event.getChannel().block())
                         .createEmbed(embed -> embed.setColor(Color.DARK_GOLDENROD)
-                                .setTitle(event.getMessage().getContent().substring(5).toUpperCase())
-                                .setDescription(TooltipReader.getTooltip(event.getMessage().getContent().substring(5)))).subscribe();
+                                .setTitle(event.getContent().substring(5).toUpperCase())
+                                .setDescription(TooltipReader.getTooltip(event.getContent().substring(5)))).subscribe();
             } else {
-                event.getMessage()
-                        .getChannel().block()
+                Objects.requireNonNull(event.getChannel().block())
                         .createMessage("name required").block();
             }
         });
         commands.put("d", event -> {
-            if (event.getMessage().getContent().length() > 2) {
-                event.getMessage()
-                        .getChannel().block()
-                        .createMessage(DiceRoller.rolld20(event.getMessage().getContent().substring(2))).block();
+            if (event.getContent().length() > 2) {
+                Objects.requireNonNull(event.getChannel().block())
+                        .createMessage(DiceRoller.rolld20(event.getContent().substring(2))).block();
             } else {
-                event.getMessage()
-                        .getChannel().block()
+                Objects.requireNonNull(event.getChannel().block())
                         .createMessage("value required").block();
             }
         });
         commands.put("wildsurge", event -> {
-            event.getMessage()
-                    .getChannel().block()
+            Objects.requireNonNull(event.getChannel().block())
                     .createEmbed(embed -> embed.setColor(Color.DARK_GOLDENROD)
                             .setDescription(WildMagicSurge.rollOnTable())).subscribe();
         });
         commands.put("bony", event -> {
-            event.getMessage()
-                    .getChannel().block()
+            Objects.requireNonNull(event.getChannel().block())
                     .createMessage(BonusContent.bony()).block();
         });
-        commands.put("esteban", event -> {
-            event.getMessage()
-                    .getChannel().block()
-                    .createMessage(BonusContent.esteban()).block();
-        });
         commands.put("help", event -> {
-            event.getMessage()
-                    .getChannel().block()
+            Objects.requireNonNull(event.getChannel().block())
                     .createEmbed(embed -> embed.setColor(Color.DARK_GOLDENROD)
                             .setTitle("Commands:")
                             .addField(Help.rollCode(), Help.rollHelp(), false)
@@ -59,10 +48,15 @@ public class Commands {
                             .addField(Help.surgeCode(), Help.surgeHelp(), false)).subscribe();
 
         });
-        commands.put("hes kinda dumb", event -> {
-            event.getMessage()
-                    .getChannel().block()
-                    .createMessage(BonusContent.dumb()).block();
+        commands.put("info", event -> {
+            Objects.requireNonNull(event.getChannel().block())
+                    .createEmbed(embed -> embed.setColor(Color.DARK_GOLDENROD)
+                            .setTitle(Info.gitHub())
+                            .setUrl("https://github.com/apewhisperer/apeBot")
+                            .setFooter("created by: " + Info.author() + " " + "email: " + Info.email(), "https://discord.com/assets/6debd47ed13483642cf09e832ed0bc1b.png")
+                            .setAuthor("4pe wh1sperer", "https://discordapp.com/users/253270489173196800", "https://cdn.discordapp.com/avatars/253270489173196800/7e9d8a6f49d7b4f90c514cbf07c92cbd.webp?size=128")
+                            .setDescription(Info.description())).subscribe();
+
         });
         return commands;
     }

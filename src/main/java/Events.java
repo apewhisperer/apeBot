@@ -1,34 +1,36 @@
 import discord4j.core.GatewayDiscordClient;
 import discord4j.core.event.domain.lifecycle.ReadyEvent;
-import discord4j.core.event.domain.message.MessageCreateEvent;
+import discord4j.core.object.entity.Message;
 import discord4j.core.object.entity.User;
 import discord4j.core.object.presence.Activity;
 import discord4j.core.object.presence.Presence;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class Events {
 
-    public static void onMessageCreated(MessageCreateEvent event, Map<String, ExecuteInterface> commands) {
+    public static void onMessageCreated(Message message, Map<String, IExecute> commands) {
 
-        final String content = event.getMessage().getContent();
+        final String content = message.getContent();
 
-        if (event.getMessage().getContent().contains("820365062300500059")) {
-            event.getMessage()
-                    .getChannel().block()
-                    .createMessage("!help").block();
+        if (message.getContent().contains("820365062300500059")) {
+            Objects.requireNonNull(message.getChannel().block()).
+                    createMessage(message.getAuthor().get().getMention() + " type this:```!help```").block();
         }
-        for (final Map.Entry<String, ExecuteInterface> entry : commands.entrySet()) {
+        for (final Map.Entry<String, IExecute> entry : commands.entrySet()) {
             if (content.startsWith('!' + entry.getKey())) {
-                entry.getValue().execute(event);
+                entry.getValue().execute(message);
                 break;
             }
         }
     }
 
     public static void onReady(ReadyEvent event, GatewayDiscordClient client) {
+
+        final User user = event.getSelf();
+
         client.updatePresence(Presence.online(Activity.listening("!help"))).subscribe();
-        final User self = event.getSelf();
-        System.out.printf("Logged in as %s#%s%n", self.getUsername(), self.getDiscriminator());
+        System.out.printf("Logged in as %s#%s%n", user.getUsername(), user.getDiscriminator());
     }
 }

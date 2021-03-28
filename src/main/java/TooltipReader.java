@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 public class TooltipReader {
 
@@ -16,9 +17,9 @@ public class TooltipReader {
             URL url = new URL("http://dnd5e.wikidot.com/spell:" + spellName);
             bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
             String foundWord = "page-content";
-            String currentLineLevel1 = "";
-            String currentLineLevel2 = "";
-            String currentLineLevel3 = "";
+            String currentLineLevel1;
+            String currentLineLevel2;
+            String currentLineLevel3;
             String tooltip = "";
 
             while ((currentLineLevel1 = bufferedReader.readLine()) != null) {
@@ -48,7 +49,10 @@ public class TooltipReader {
     }
 
     private static String filterInput(String tooltip) {
-        tooltip = tooltip.replaceAll("<p>", "\n")
+        byte[] bytes = tooltip.getBytes(StandardCharsets.UTF_8);
+        String converted = new String(bytes);
+        converted = converted.substring(0, tooltip.indexOf("<p><strong><em>Spell Lists.</em></strong>"));
+        converted = converted.replaceAll("<p>", "\n")
                 .replaceAll("</p>", "\n")
                 .replaceAll("<ul><li>", "\n• ")
                 .replaceAll("</li></ul>", "\n")
@@ -57,14 +61,8 @@ public class TooltipReader {
                 .replaceAll("<em>", "")
                 .replaceAll("</em>", "")
                 .replaceAll("<strong>", "**")
-                .replaceAll("</strong>", "**")
-                .replaceAll("â€™", "'")
-                .replaceAll("â€”", "-")
-                .replaceAll("â€“", "–")
-                .replaceAll("â€˘", "•");
-        tooltip = tooltip.substring(0, tooltip.indexOf("Spell Lists"));
-        tooltip = tooltip.substring(0, tooltip.lastIndexOf("**"));
-        return trimTo2000Chars(tooltip);
+                .replaceAll("</strong>", "**");
+        return trimTo2000Chars(converted);
     }
 
     private static String trimTo2000Chars(String tooltip) {
