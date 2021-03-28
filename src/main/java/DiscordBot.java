@@ -2,8 +2,10 @@ import discord4j.core.DiscordClientBuilder;
 import discord4j.core.GatewayDiscordClient;
 import discord4j.core.event.domain.lifecycle.ReadyEvent;
 import discord4j.core.event.domain.message.MessageCreateEvent;
+import io.github.cdimascio.dotenv.Dotenv;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class DiscordBot {
     private static final Map<String, IExecute> commands;
@@ -14,7 +16,9 @@ public class DiscordBot {
 
     public static void main(String[] args) {
 
-        GatewayDiscordClient client = DiscordClientBuilder.create("ODIwMzY1MDYyMzAwNTAwMDU5.YE0GgA.PRGZHhTF6YEfuyraDPYQz3n492k")
+        Dotenv dotenv = Dotenv.load();
+
+        GatewayDiscordClient client = DiscordClientBuilder.create(Objects.requireNonNull(dotenv.get("TOKEN")))
                 .build()
                 .login()
                 .block();
