@@ -1,7 +1,7 @@
 public class Info {
 
     public static String description() {
-        return "Discord bot for playing D&D, written in Java and created using Discord4j 3.1.3 library.";
+        return "Discord bot for playing D&D, written in Java and created using [Discord4j](https://discord4j.com/) 3.1.3 library.";
     }
 
     public static String gitHub() {

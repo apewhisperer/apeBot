@@ -3,133 +3,118 @@ import java.util.Random;
 
 public class DiceRoller {
 
-    public static String rolld20(String modifier) {
+    public static String rollDice(String message) {
 
-        Log.registerEvent("!d", modifier);
+        String details = "";
+        Log.registerEvent("!d", message);
 
-        ArrayList<Character> list = new ArrayList<>();
-        char[] chars = modifier.toCharArray();
+        int[] array = getArray(message);
 
-        for (char c : chars) {
+        int number = array[0];
+        int dice = array[1];
+        int bonus = array[2];
+
+        if (number > 500) {
+            return "dice number must not exceed 500";
+        }
+        if (dice < 2 || dice > 100) {
+            return "dice value must be within 2-100 range";
+        }
+        if (bonus < -100 || bonus > 100) {
+            return "modifier must be within (-100)-100 range";
+        }
+
+        String result;
+        Random random = new Random();
+        int sum = 0;
+        if (number == 0) {
+            int roll = random.nextInt(dice) + 1;
+            sum += roll + bonus;
+            details = details.concat(String.valueOf(roll + bonus));
+        } else {
+            for (int i = 0; i < number; i++) {
+                int roll = random.nextInt(dice) + 1;
+                sum += roll + bonus;
+                details = details.concat(String.valueOf(roll + bonus));
+                if (i < number - 1) {
+                    details = details.concat(", ");
+                }
+            }
+        }
+        result = "Roll: `[" + details + "]` Result: " + sum;
+        return result;
+    }
+
+    private static int[] getArray(String message) {
+
+        String noWhitespaceMessage = message.trim().replaceAll(" ", "");
+
+        boolean isNegative = false;
+        int[] array = new int[3];
+
+        ArrayList<Character> diceNumberArray = new ArrayList<>();
+        ArrayList<Character> diceTypeArray = new ArrayList<>();
+        ArrayList<Character> bonusArray = new ArrayList<>();
+
+        char[] diceNumberChar = noWhitespaceMessage.substring((noWhitespaceMessage.indexOf("!") + 1), (noWhitespaceMessage.indexOf("d"))).toCharArray();
+        char[] diceTypeChar;
+        char[] bonusChar = new char[0];
+
+        if (noWhitespaceMessage.contains("+")) {
+            diceTypeChar = noWhitespaceMessage.substring((noWhitespaceMessage.indexOf("d") + 1), noWhitespaceMessage.indexOf("+")).toCharArray();
+            bonusChar = noWhitespaceMessage.substring(noWhitespaceMessage.indexOf("+") + 1).toCharArray();
+        } else if (noWhitespaceMessage.contains("-")) {
+            isNegative = true;
+            diceTypeChar = noWhitespaceMessage.substring((noWhitespaceMessage.indexOf("d") + 1), noWhitespaceMessage.indexOf("-")).toCharArray();
+            bonusChar = noWhitespaceMessage.substring(noWhitespaceMessage.indexOf("-") + 1).toCharArray();
+        } else {
+            diceTypeChar = noWhitespaceMessage.substring(noWhitespaceMessage.indexOf("d") + 1).toCharArray();
+        }
+
+        for (char c : diceNumberChar) {
             if (Character.isDigit(c)) {
-                list.add(c);
+                diceNumberArray.add(c);
             } else {
                 break;
             }
         }
-
-        String dice = modifier.substring(0, list.size());
-        String operation = "";
-        if (modifier.length() > list.size()) {
-            operation = modifier.substring(list.size());
-        }
-        if (!dice.equals("")) {
-            if (Integer.parseInt(dice) > 1) {
-                Random random = new Random();
-                int roll = random.nextInt(Integer.parseInt(dice)) + 1;
-                int evaluateResult = Integer.parseInt(evaluate(operation)) + roll;
-                return "```" + evaluateResult + "```";
-            } else if (Integer.parseInt(dice) == 1) {
-                return "nice one";
+        for (char c : diceTypeChar) {
+            if (Character.isDigit(c)) {
+                diceTypeArray.add(c);
+            } else {
+                break;
             }
-                return "value required";
         }
-        return "illegal input";
+        for (char c : bonusChar) {
+            if (Character.isDigit(c)) {
+                bonusArray.add(c);
+            } else {
+                break;
+            }
+        }
+        String diceNumberString = getString(diceNumberArray);
+        String diceTypeString = getString(diceTypeArray);
+        String bonusString = getString(bonusArray);
+        if (!diceNumberString.equals("")) {
+            array[0] += Integer.parseInt(diceNumberString);
+        }
+        if (!diceTypeString.equals("")) {
+            array[1] += Integer.parseInt(diceTypeString);
+        }
+        if (!bonusString.equals("")) {
+            array[2] += Integer.parseInt(bonusString);
+        }
+        if (isNegative) {
+            array[2] *= -1;
+        }
+        return array;
     }
 
-    public static String evaluate(final String str) {
-        return String.valueOf((int) new Object() {
-            int pos = -1, ch;
-
-            void nextChar() {
-                ch = (++pos < str.length()) ? str.charAt(pos) : -1;
-            }
-
-            boolean eat(int charToEat) {
-                while (ch == ' ') nextChar();
-                if (ch == charToEat) {
-                    nextChar();
-                    return true;
-                }
-                return false;
-            }
-
-            double parse() {
-                nextChar();
-                double x = parseExpression();
-                if (pos < str.length()) {
-                    return 0;
-//                    throw new RuntimeException("Unexpected: " + (char)ch);
-                }
-                return x;
-            }
-
-            // Grammar:
-            // expression = term | expression `+` term | expression `-` term
-            // term = factor | term `*` factor | term `/` factor
-            // factor = `+` factor | `-` factor | `(` expression `)`
-            //        | number | functionName factor | factor `^` factor
-
-            double parseExpression() {
-                double x = parseTerm();
-                for (; ; ) {
-                    if (eat('+')) x += parseTerm(); // addition
-                    else if (eat('-')) x -= parseTerm(); // subtraction
-                    else return x;
-                }
-            }
-
-            double parseTerm() {
-                double x = parseFactor();
-                for (; ; ) {
-                    if (eat('*')) x *= parseFactor(); // multiplication
-                    else if (eat('/')) x /= parseFactor(); // division
-                    else return x;
-                }
-            }
-
-            double parseFactor() {
-                if (eat('+')) return parseFactor(); // unary plus
-                if (eat('-')) return -parseFactor(); // unary minus
-
-                double x;
-                int startPos = this.pos;
-                if (eat('(')) { // parentheses
-                    x = parseExpression();
-                    eat(')');
-                } else if ((ch >= '0' && ch <= '9') || ch == '.') { // numbers
-                    while ((ch >= '0' && ch <= '9') || ch == '.') nextChar();
-                    x = Double.parseDouble(str.substring(startPos, this.pos));
-                } else if (ch >= 'a' && ch <= 'z') { // functions
-                    while (ch >= 'a' && ch <= 'z') nextChar();
-                    String func = str.substring(startPos, this.pos);
-                    x = parseFactor();
-                    switch (func) {
-                        case "sqrt":
-                            x = Math.sqrt(x);
-                            break;
-                        case "sin":
-                            x = Math.sin(Math.toRadians(x));
-                            break;
-                        case "cos":
-                            x = Math.cos(Math.toRadians(x));
-                            break;
-                        case "tan":
-                            x = Math.tan(Math.toRadians(x));
-                            break;
-                        default:
-//                        throw new RuntimeException("Unknown function: " + func);
-                            return 0;
-                    }
-                } else {
-                    return 0;
-//                    throw new RuntimeException("Unexpected: " + (char)ch);
-                }
-
-                if (eat('^')) x = Math.pow(x, parseFactor()); // exponentiation
-
-                return x;
-            }
-        }.parse());
+    private static String getString(ArrayList<Character> list) {
+        StringBuilder builder = new StringBuilder(list.size());
+        for (Character ch : list) {
+            builder.append(ch);
+        }
+        return builder.toString();
     }
 }

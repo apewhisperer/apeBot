@@ -14,15 +14,19 @@ public class Events {
 
         final String content = message.getContent();
 
-        if (message.getContent().contains("820365062300500059")) {
-            Objects.requireNonNull(message.getChannel().block()).
-                    createMessage(message.getAuthor().get().getMention() + " type this:```!help```").block();
+        if (content.matches("^!\\d+d\\d+[+-]\\S+") || content.matches("^!d\\d+[+-]\\S+") || content.matches("^!\\d+d\\S+") || content.matches("^!d\\d+")) {
+            commands.get("d").execute(message);
+            return;
         }
         for (final Map.Entry<String, IExecute> entry : commands.entrySet()) {
             if (content.startsWith('!' + entry.getKey())) {
                 entry.getValue().execute(message);
                 break;
             }
+        }
+        if (content.contains("820365062300500059")) {
+            Objects.requireNonNull(message.getChannel().block()).
+                    createMessage(message.getAuthor().get().getMention() + " type this:`!help`").block();
         }
     }
 
