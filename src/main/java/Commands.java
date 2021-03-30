@@ -1,9 +1,9 @@
-import discord4j.core.spec.MessageCreateSpec;
+import discord4j.core.object.VoiceState;
+import discord4j.core.object.entity.Member;
+import discord4j.core.object.entity.channel.VoiceChannel;
 import discord4j.rest.util.Color;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class Commands {
 
@@ -11,32 +11,56 @@ public class Commands {
 
         final Map<String, IExecute> commands = new HashMap<>();
 
-        commands.put("tip", message -> {
-            if (message.getContent().length() > 4) {
-                Objects.requireNonNull(message.getChannel().block())
+        final TrackScheduler scheduler = new TrackScheduler(DiscordBot.player);
+        commands.put("join", event -> {
+            final Member member = event.getMember().orElse(null);
+
+            if (member != null) {
+                final VoiceState voiceState = member.getVoiceState().block();
+                if (voiceState != null) {
+                    final VoiceChannel channel = voiceState.getChannel().block();
+                    if (channel != null) {
+                        // join returns a VoiceConnection which would be required if we were
+                        // adding disconnection features, but for now we are just ignoring it.
+                        channel.join(spec -> spec.setProvider(DiscordBot.provider)).block();
+                    }
+                }
+            }
+        });
+        commands.put("play", event -> {
+            Log.registerEvent("!play ", event.getMessage().getContent());
+            final String content = event.getMessage().getContent();
+            final List<String> command = Arrays.asList(content.split(" "));
+            DiscordBot.playerManager.loadItem(command.get(1), scheduler);
+        });
+        commands.put("tip", event -> {
+            Log.registerEvent("!tip ", event.getMessage().getContent());
+            if (event.getMessage().getContent().length() > 4) {
+                Objects.requireNonNull(event.getMessage().getChannel().block())
                         .createEmbed(embed -> embed.setColor(Color.DARK_GOLDENROD)
-                                .setTitle(message.getContent().substring(5).toUpperCase())
-                                .setDescription(TooltipReader.getTooltip(message.getContent().substring(5)))).subscribe();
+                                .setTitle(event.getMessage().getContent().substring(5).toUpperCase())
+                                .setDescription(TooltipReader.getTooltip(event.getMessage().getContent().substring(5)))).subscribe();
             } else {
-                Objects.requireNonNull(message.getChannel().block())
+                Objects.requireNonNull(event.getMessage().getChannel().block())
                         .createMessage("name required").block();
             }
         });
-        commands.put("d", message -> {
-            Objects.requireNonNull(message.getChannel().block())
-                    .createMessage(DiceRoller.rollDice(message.getContent())).block();
+        commands.put("d", event -> {
+            Log.registerEvent("!d", event.getMessage().getContent());
+            Objects.requireNonNull(event.getMessage().getChannel().block())
+                    .createMessage(DiceRoller.rollDice(event.getMessage().getContent())).block();
         });
-        commands.put("wildsurge", message -> {
-            Objects.requireNonNull(message.getChannel().block())
+        commands.put("wildsurge", event -> {
+            Objects.requireNonNull(event.getMessage().getChannel().block())
                     .createEmbed(embed -> embed.setColor(Color.DARK_GOLDENROD)
                             .setDescription(WildMagicSurge.rollOnTable())).subscribe();
         });
-        commands.put("bony", message -> {
-            Objects.requireNonNull(message.getChannel().block())
+        commands.put("bony", event -> {
+            Objects.requireNonNull(event.getMessage().getChannel().block())
                     .createMessage(BonusContent.bony()).block();
         });
-        commands.put("help", message -> {
-            Objects.requireNonNull(message.getChannel().block())
+        commands.put("help", event -> {
+            Objects.requireNonNull(event.getMessage().getChannel().block())
                     .createEmbed(embed -> embed.setColor(Color.DARK_GOLDENROD)
                             .setTitle("Commands:")
                             .addField(Help.rollCode(), Help.rollHelp(), false)
@@ -44,8 +68,8 @@ public class Commands {
                             .addField(Help.surgeCode(), Help.surgeHelp(), false)).subscribe();
 
         });
-        commands.put("info", message -> {
-            Objects.requireNonNull(message.getChannel().block())
+        commands.put("info", event -> {
+            Objects.requireNonNull(event.getMessage().getChannel().block())
                     .createEmbed(embed -> embed.setColor(Color.DARK_GOLDENROD)
                             .setTitle(Info.gitHub())
                             .setUrl("https://github.com/apewhisperer/apeBot")

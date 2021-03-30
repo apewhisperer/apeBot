@@ -1,6 +1,6 @@
 import discord4j.core.GatewayDiscordClient;
 import discord4j.core.event.domain.lifecycle.ReadyEvent;
-import discord4j.core.object.entity.Message;
+import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.User;
 import discord4j.core.object.presence.Activity;
 import discord4j.core.object.presence.Presence;
@@ -10,23 +10,23 @@ import java.util.Objects;
 
 public class Events {
 
-    public static void onMessageCreated(Message message, Map<String, IExecute> commands) {
+    public static void onMessageCreated(MessageCreateEvent event, Map<String, IExecute> commands) {
 
-        final String content = message.getContent();
+        final String content = event.getMessage().getContent();
 
         if (content.matches("^!\\d+d\\d+[+-]\\S+") || content.matches("^!d\\d+[+-]\\S+") || content.matches("^!\\d+d\\S+") || content.matches("^!d\\d+")) {
-            commands.get("d").execute(message);
+            commands.get("d").execute(event);
             return;
         }
         for (final Map.Entry<String, IExecute> entry : commands.entrySet()) {
             if (content.startsWith('!' + entry.getKey())) {
-                entry.getValue().execute(message);
+                entry.getValue().execute(event);
                 break;
             }
         }
         if (content.contains("820365062300500059")) {
-            Objects.requireNonNull(message.getChannel().block()).
-                    createMessage(message.getAuthor().get().getMention() + " type this:`!help`").block();
+            Objects.requireNonNull(event.getMessage().getChannel().block()).
+                    createMessage(event.getMessage().getAuthor().get().getMention() + " type this:`!help`").block();
         }
     }
 

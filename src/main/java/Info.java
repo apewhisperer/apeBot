@@ -7,9 +7,11 @@ public class Info {
     public static String gitHub() {
         return "GitHub";
     }
+
     public static String author() {
         return "4pe wh1sperer#4639";
     }
+
     public static String email() {
         return "czlowiekprosty@gmail.com";
     }

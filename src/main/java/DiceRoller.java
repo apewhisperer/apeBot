@@ -6,7 +6,6 @@ public class DiceRoller {
     public static String rollDice(String message) {
 
         String details = "";
-        Log.registerEvent("!d", message);
 
         int[] array = getArray(message);
 

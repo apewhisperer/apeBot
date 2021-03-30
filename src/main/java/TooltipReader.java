@@ -8,8 +8,6 @@ public class TooltipReader {
 
     public static String getTooltip(String spellName) {
 
-        Log.registerEvent("!tip ", spellName);
-
         spellName = spellName.replaceAll(" ", "-");
 
         BufferedReader bufferedReader = null;
