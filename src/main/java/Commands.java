@@ -9,9 +9,14 @@ public class Commands {
 
     public static Map<String, IExecute> getCommands() {
 
+        Player player = new Player();
         final Map<String, IExecute> commands = new HashMap<>();
+        final TrackScheduler scheduler = new TrackScheduler(player.getPlayer());
 
-        final TrackScheduler scheduler = new TrackScheduler(DiscordBot.player);
+        commands.put("test", event -> {
+            Objects.requireNonNull(event.getMessage().getChannel().block())
+                    .createMessage("!test").block();
+        });
         commands.put("join", event -> {
             final Member member = event.getMember().orElse(null);
 
@@ -20,21 +25,41 @@ public class Commands {
                 if (voiceState != null) {
                     final VoiceChannel channel = voiceState.getChannel().block();
                     if (channel != null) {
-                        // join returns a VoiceConnection which would be required if we were
-                        // adding disconnection features, but for now we are just ignoring it.
-                        channel.join(spec -> spec.setProvider(DiscordBot.provider)).block();
+                        channel.join(spec -> spec.setProvider(player.getProvider())).block();
+                    }
+                }
+            }
+        });
+        commands.put("leave", event -> {
+            final Member member = event.getMember().orElse(null);
+
+            if (member != null) {
+                final VoiceState voiceState = member.getVoiceState().block();
+                if (voiceState != null) {
+                    final VoiceChannel channel = voiceState.getChannel().block();
+                    if (channel != null) {
+                        channel.sendDisconnectVoiceState().block();
                     }
                 }
             }
         });
         commands.put("play", event -> {
-            Log.registerEvent("!play ", event.getMessage().getContent());
+            Log.registerEvent(event.getMessage().getContent());
             final String content = event.getMessage().getContent();
             final List<String> command = Arrays.asList(content.split(" "));
-            DiscordBot.playerManager.loadItem(command.get(1), scheduler);
+            if (command.size() == 1 && player.getPlayer().isPaused()) {
+                player.getPlayer().setPaused(false);
+            } else {
+                player.getPlayerManager().loadItem(command.get(1), scheduler);
+            }
+        });
+        commands.put("pause", event -> {
+            if (!player.getPlayer().isPaused()) {
+                player.getPlayer().setPaused(true);
+            }
         });
         commands.put("tip", event -> {
-            Log.registerEvent("!tip ", event.getMessage().getContent());
+            Log.registerEvent(event.getMessage().getContent());
             if (event.getMessage().getContent().length() > 4) {
                 Objects.requireNonNull(event.getMessage().getChannel().block())
                         .createEmbed(embed -> embed.setColor(Color.DARK_GOLDENROD)
@@ -46,7 +71,7 @@ public class Commands {
             }
         });
         commands.put("d", event -> {
-            Log.registerEvent("!d", event.getMessage().getContent());
+            Log.registerEvent(event.getMessage().getContent());
             Objects.requireNonNull(event.getMessage().getChannel().block())
                     .createMessage(DiceRoller.rollDice(event.getMessage().getContent())).block();
         });
