@@ -7,15 +7,18 @@ import discord4j.voice.AudioProvider;
 
 public class Player {
 
-    // Creates AudioPlayer instances and translates URLs to AudioTrack instances
     private final AudioPlayerManager playerManager = new DefaultAudioPlayerManager();
-    // Create an AudioPlayer so Discord4J can receive audio data
     private final AudioPlayer player = playerManager.createPlayer();
-    // We will be creating LavaPlayerAudioProvider in the next step
-    private AudioProvider provider = new PlayerProvider(player);
+    private final AudioProvider provider = new PlayerProvider(player);
+    private final TrackScheduler scheduler = new TrackScheduler(player);
 
     public Player() {
+        player.setVolume(10);
         init();
+    }
+
+    public TrackScheduler getScheduler() {
+        return scheduler;
     }
 
     public AudioPlayerManager getPlayerManager() {
@@ -30,13 +33,14 @@ public class Player {
         return provider;
     }
 
-    // This is an optimization strategy that Discord4J can utilize.
-// It is not important to understand
+
     private void init() {
+        // This is an optimization strategy that Discord4J can utilize.
+        // It is not important to understand
         playerManager.getConfiguration()
                 .setFrameBufferFactory(NonAllocatingAudioFrameBuffer::new);
 
-// Allow playerManager to parse remote sources like YouTube links
+        // Allow playerManager to parse remote sources like YouTube links
         AudioSourceManagers.registerRemoteSources(playerManager);
     }
 }
