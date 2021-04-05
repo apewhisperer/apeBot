@@ -6,46 +6,49 @@ import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-public final class TrackScheduler implements AudioLoadResultHandler {
+public final class TrackScheduler extends AudioEventAdapter implements AudioLoadResultHandler {
 
     private final AudioPlayer player;
-    List<AudioTrack> list = new ArrayList<>();
+    Map<Integer, AudioTrack> list = new HashMap<>();
     int position;
 
     public TrackScheduler(final AudioPlayer player) {
         this.player = player;
     }
 
+    private void setPosition(AudioTrack track) {
+
+        for (int i = 0; i < list.size(); i++) {
+            if (track == list.get(i)) {
+                position = i;
+                System.out.println("postion set to : " + i);
+            }
+        }
+    }
+
     @Override
     public void trackLoaded(final AudioTrack track) {
-        // LavaPlayer found an audio source for us to play
-        player.playTrack(track);
+        list.put(list.size() - 1, track);
+        setPosition(track);
+        player.playTrack(list.get(position));
+        player.addListener(this);
     }
 
     @Override
     public void playlistLoaded(final AudioPlaylist playlist) {
-
-        list = playlist.getTracks();
-//        trackLoaded(list.get(position));
+        for (int i = 0; i < playlist.getTracks().size(); i++) {
+//            if (playlist.getSelectedTrack() == playlist.getTracks().get(i)) {
+//                position = i;
+//                System.out.println("postion set to : " + i);
+//            }
+            list.put(position + i, playlist.getTracks().get(i));
+        }
+        setPosition(playlist.getSelectedTrack());
         player.playTrack(list.get(position));
-
-        player.addListener(new AudioEventAdapter() {
-            @Override
-            public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
-                if (endReason == AudioTrackEndReason.FINISHED) {
-                    position++;
-                    if (position < list.size()) {
-                        System.out.println("trackend");
-//                trackLoaded(list.get(position));
-                        player.playTrack(list.get(position));
-                    }
-                }
-            }
-        });
-        // LavaPlayer found multiple AudioTracks from some playlist
+        player.addListener(this);
     }
 
     @Override
@@ -56,5 +59,16 @@ public final class TrackScheduler implements AudioLoadResultHandler {
     @Override
     public void loadFailed(final FriendlyException exception) {
         // LavaPlayer could not parse an audio source for some reason
+    }
+    @Override
+    public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
+
+        position++;
+        if (position < list.size() && endReason.mayStartNext) {
+            System.out.println("track end" + " pos: " + position);
+            player.playTrack(list.get(position));
+            return;
+        }
+        player.destroy();
     }
 }

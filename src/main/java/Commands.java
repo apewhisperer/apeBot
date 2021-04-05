@@ -184,7 +184,6 @@ public class Commands {
                         if (entry.getValue().getPlayer().isPaused()) {
                             entry.getValue().getPlayer().setPaused(false);
                         }
-                        entry.getValue().getScheduler().position = 0;
                         entry.getValue().getPlayerManager().loadItem(command.get(1), entry.getValue().getScheduler());
                         Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(playEmoji))).block();
                     }
