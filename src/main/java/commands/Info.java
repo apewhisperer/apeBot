@@ -1,0 +1,20 @@
+package commands;
+
+public class Info {
+
+    public static String description() {
+        return "Discord bot for playing D&D, written in Java and created using [Discord4j](https://discord4j.com/) 3.1.5 library.";
+    }
+
+    public static String gitHub() {
+        return "GitHub";
+    }
+
+    public static String author() {
+        return "4pe wh1sperer#4639";
+    }
+
+    public static String email() {
+        return "czlowiekprosty@gmail.com";
+    }
+}
