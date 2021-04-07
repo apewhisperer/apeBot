@@ -81,7 +81,7 @@ public class BonusContent {
                 return "Roll a d10. Your age changes by a number of years equal to the roll. If the roll is odd, you get younger (minimum 1 year old). If the roll is even, you get older.";
             case 37:
             case 38:
-                return " \t1d6 flumphs controlled by the DM appear in unoccupied spaces within 60 feet of you and are frightened of you. They vanish after 1 minute.";
+                return "1d6 flumphs controlled by the DM appear in unoccupied spaces within 60 feet of you and are frightened of you. They vanish after 1 minute.";
             case 39:
             case 40:
                 return "You regain 2d10 hit points.";

@@ -7,7 +7,7 @@ import java.util.Date;
 
 public class Log {
 
-    public static void registerEvent(String command) {
+    static void registerEvent(String command) {
 
         File log = new File("log.txt");
         FileWriter fileWriter = null;

@@ -20,6 +20,9 @@ public class Commands implements ICommands {
         String minusEmoji = "\u2B07";
         String equalEmoji = "\u2195";
 
+        commands.put("banana", event -> {
+            ICommands.banana(event);
+        });
         commands.put("volume", event -> {
             ICommands.changeVolume(plusEmoji, minusEmoji, equalEmoji, event);
         });

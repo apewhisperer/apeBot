@@ -53,23 +53,21 @@ public final class TrackScheduler extends AudioEventAdapter implements AudioLoad
 
     @Override
     public void noMatches() {
-        // LavaPlayer did not find any audio to extract
+        System.out.println("no matches found");
     }
 
     @Override
     public void loadFailed(final FriendlyException exception) {
-        // LavaPlayer could not parse an audio source for some reason
+        System.out.println("track load failed");
     }
 
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
 
-        position++;
-        if (position < list.size() && endReason.mayStartNext) {
+        if (position < list.size() + 1 && endReason.mayStartNext) {
             System.out.println("track end" + " pos: " + position);
+            position++;
             player.playTrack(list.get(position));
-            return;
         }
-        player.destroy();
     }
 }

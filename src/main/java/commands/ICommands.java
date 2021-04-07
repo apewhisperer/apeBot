@@ -19,6 +19,19 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 public interface ICommands {
+
+    static void banana(MessageCreateEvent event) {
+
+        Objects.requireNonNull(event.getMessage().getChannel().block())
+                .createMessage(new Consumer<MessageCreateSpec>() {
+                    @Override
+                    public void accept(MessageCreateSpec messageCreateSpec) {
+                        messageCreateSpec.setTts(true);
+                        messageCreateSpec.setContent("go eat a banana");
+                    }
+                }).block();
+    }
+
     static void changeVolume(String plusEmoji, String minusEmoji, String equalEmoji, MessageCreateEvent event) {
         final String content = event.getMessage().getContent();
         final List<String> command = Arrays.asList(content.split(" "));
@@ -105,18 +118,6 @@ public interface ICommands {
         }
     }
 
-    static void convertToFile(MessageCreateEvent event, String command) {
-        InputStream targetStream = new ByteArrayInputStream(command.getBytes());
-
-        Objects.requireNonNull(event.getMessage().getChannel().block())
-                .createMessage(new Consumer<MessageCreateSpec>() {
-                    @Override
-                    public void accept(MessageCreateSpec messageCreateSpec) {
-                        messageCreateSpec.addFile("message.txt", targetStream);
-                    }
-                }).block();
-    }
-
     static void tip(MessageCreateEvent event) {
         Log.registerEvent(event.getMessage().getContent());
         String command = TooltipReader.getTooltip(event.getMessage().getContent().substring(5));
@@ -194,6 +195,22 @@ public interface ICommands {
         }
     }
 
+    static void quit(MessageCreateEvent event) {
+        final Member member = event.getMember().orElse(null);
+        VoiceChannel channel = getChannel(member);
+
+        if (channel != null) {
+            for (Map.Entry<VoiceChannel, Player> entry : Commands.channelPlayerMap.entrySet()) {
+                if (entry.getKey().equals(channel)) {
+                    entry.getValue().getPlayer().destroy();
+                    Commands.channelPlayerMap.remove(entry.getKey(), entry.getValue());
+                    System.out.println("player destroyed");
+                    channel.sendDisconnectVoiceState().block();
+                }
+            }
+        }
+    }
+
     static VoiceChannel getChannel(Member member) {
         if (member != null) {
             final VoiceState voiceState = member.getVoiceState().block();
@@ -204,17 +221,15 @@ public interface ICommands {
         return null;
     }
 
-    static void quit(MessageCreateEvent event) {
-        final Member member = event.getMember().orElse(null);
-        VoiceChannel channel = getChannel(member);
+    static void convertToFile(MessageCreateEvent event, String command) {
+        InputStream targetStream = new ByteArrayInputStream(command.getBytes());
 
-        if (channel != null) {
-            for (Map.Entry<VoiceChannel, Player> entry : Commands.channelPlayerMap.entrySet()) {
-                if (entry.getKey().equals(channel)) {
-                    entry.getValue().getPlayer().destroy();
-                    channel.sendDisconnectVoiceState().block();
-                }
-            }
-        }
+        Objects.requireNonNull(event.getMessage().getChannel().block())
+                .createMessage(new Consumer<MessageCreateSpec>() {
+                    @Override
+                    public void accept(MessageCreateSpec messageCreateSpec) {
+                        messageCreateSpec.addFile("message.txt", targetStream);
+                    }
+                }).block();
     }
 }
