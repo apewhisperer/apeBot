@@ -14,6 +14,7 @@ import java.util.Map;
 public final class TrackScheduler extends AudioEventAdapter implements AudioLoadResultHandler {
 
     public boolean isStopped = false;
+    public boolean isLoaded = false;
     private final AudioPlayer player;
     Map<Integer, AudioTrack> list = new HashMap<>();
     int position;
@@ -44,24 +45,30 @@ public final class TrackScheduler extends AudioEventAdapter implements AudioLoad
         this.isStopped = isStopped;
     }
 
+    public boolean isLoaded() {
+        return isLoaded;
+    }
+
     @Override
     public void trackLoaded(final AudioTrack track) {
 
+        isLoaded = false;
         list.put(list.size(), track);
         setPosition(track);
         player.addListener(this);
-        player.playTrack(list.get(position));
+        isLoaded = true;
     }
 
     @Override
     public void playlistLoaded(final AudioPlaylist playlist) {
 
+        isLoaded = false;
         for (int i = 0; i < playlist.getTracks().size(); i++) {
             list.put(position + i, playlist.getTracks().get(i));
         }
         setPosition(playlist.getSelectedTrack());
         player.addListener(this);
-        player.playTrack(list.get(position));
+        isLoaded = true;
     }
 
     @Override

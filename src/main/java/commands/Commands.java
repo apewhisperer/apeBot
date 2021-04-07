@@ -2,14 +2,14 @@ package commands;
 
 import core.IExecute;
 import discord4j.core.object.entity.channel.VoiceChannel;
-import player.Player;
+import player.PlayerController;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class Commands implements ICommands {
 
-    static Map<VoiceChannel, Player> channelPlayerMap = new HashMap<>();
+    static Map<VoiceChannel, PlayerController> channelPlayerMap = new HashMap<>();
 
     public static Map<String, IExecute> getCommands() {
 

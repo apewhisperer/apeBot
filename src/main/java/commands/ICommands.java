@@ -8,7 +8,7 @@ import discord4j.core.object.entity.channel.VoiceChannel;
 import discord4j.core.object.reaction.ReactionEmoji;
 import discord4j.core.spec.MessageCreateSpec;
 import discord4j.rest.util.Color;
-import player.Player;
+import player.PlayerController;
 import player.TrackScheduler;
 
 import java.io.ByteArrayInputStream;
@@ -42,7 +42,7 @@ public interface ICommands {
         VoiceChannel channel = getChannel(member);
 
         if (channel != null) {
-            for (Map.Entry<VoiceChannel, Player> entry : Commands.channelPlayerMap.entrySet()) {
+            for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
                 if (entry.getKey().equals(channel)) {
                     if (command.size() > 1) {
                         int levelAfter = Integer.parseInt(command.get(1));
@@ -144,7 +144,7 @@ public interface ICommands {
         VoiceChannel channel = getChannel(member);
 
         if (channel != null) {
-            for (Map.Entry<VoiceChannel, Player> entry : Commands.channelPlayerMap.entrySet()) {
+            for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
                 if (entry.getKey().equals(channel)) {
                     if (!entry.getValue().getPlayer().isPaused()) {
                         entry.getValue().getPlayer().setPaused(true);
@@ -166,24 +166,31 @@ public interface ICommands {
         VoiceChannel channel = getChannel(member);
 
         if (channel != null) {
-            for (Map.Entry<VoiceChannel, Player> entry : Commands.channelPlayerMap.entrySet()) {
+            for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
                 if (entry.getKey().equals(channel)) {
+                    TrackScheduler scheduler = entry.getValue().getScheduler();
                     if (command.size() == 1) {
-                        TrackScheduler scheduler = entry.getValue().getScheduler();
                         if (entry.getValue().getPlayer().isPaused()) {
                             entry.getValue().getPlayer().setPaused(false);
                         }
                         if (scheduler.isStopped) {
                             System.out.println("unstop");
                             scheduler.setStopped(false);
-                            entry.getValue().getPlayer().playTrack(scheduler.getList().get(scheduler.getPosition()).makeClone());
+                            entry.getValue().getPlayer().playTrack(scheduler.getList().get(scheduler.getPosition()));
                         }
                         Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(playEmoji))).block();
                     } else if (command.size() == 2) {
                         if (entry.getValue().getPlayer().isPaused()) {
                             entry.getValue().getPlayer().setPaused(false);
                         }
-                        entry.getValue().getPlayerManager().loadItem(command.get(1), entry.getValue().getScheduler());
+                        LoadThread loadThread = new LoadThread(command.get(1), entry.getValue());
+                        loadThread.start();
+                        try {
+                            loadThread.join();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        entry.getValue().getPlayer().playTrack(scheduler.getList().get(scheduler.getPosition()));
                         Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(playEmoji))).block();
                     }
                 }
@@ -192,15 +199,15 @@ public interface ICommands {
     }
 
     static void join(MessageCreateEvent event) {
-        Player player = new Player();
+        PlayerController playerController = new PlayerController();
         final Member member = event.getMember().orElse(null);
         VoiceChannel channel = getChannel(member);
 
         if (channel != null) {
             if (!Commands.channelPlayerMap.containsKey(channel)) {
-                Commands.channelPlayerMap.put(channel, player);
+                Commands.channelPlayerMap.put(channel, playerController);
             }
-            channel.join(spec -> spec.setProvider(player.getProvider())).block();
+            channel.join(spec -> spec.setProvider(playerController.getProvider())).block();
         }
     }
 
@@ -209,7 +216,7 @@ public interface ICommands {
         VoiceChannel channel = getChannel(member);
 
         if (channel != null) {
-            for (Map.Entry<VoiceChannel, Player> entry : Commands.channelPlayerMap.entrySet()) {
+            for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
                 if (entry.getKey().equals(channel)) {
                     entry.getValue().getPlayer().destroy();
                     Commands.channelPlayerMap.remove(entry.getKey(), entry.getValue());
@@ -247,7 +254,7 @@ public interface ICommands {
         VoiceChannel channel = getChannel(member);
 
         if (channel != null) {
-            for (Map.Entry<VoiceChannel, Player> entry : Commands.channelPlayerMap.entrySet()) {
+            for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
                 if (entry.getKey().equals(channel)) {
                     entry.getValue().getPlayer().stopTrack();
                     Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(stopEmoji))).block();

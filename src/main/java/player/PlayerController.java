@@ -7,14 +7,14 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.track.playback.NonAllocatingAudioFrameBuffer;
 import discord4j.voice.AudioProvider;
 
-public class Player {
+public class PlayerController {
 
     private final AudioPlayerManager playerManager = new DefaultAudioPlayerManager();
     private final AudioPlayer player = playerManager.createPlayer();
     private final AudioProvider provider = new PlayerProvider(player);
     private final TrackScheduler scheduler = new TrackScheduler(player);
 
-    public Player() {
+    public PlayerController() {
         player.setVolume(10);
         init();
     }
