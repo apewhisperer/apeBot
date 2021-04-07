@@ -18,9 +18,11 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <addClasspath>true</addClasspath>
-                            <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>core.DiscordBot</mainClass>
+                            <manifestEntries>
+                                <addClasspath>true</addClasspath>
+                                <classpathPrefix>lib/</classpathPrefix>
+                                <mainClass>core.DiscordBot</mainClass>
+                            </manifestEntries>
                         </manifest>
                     </archive>
                 </configuration>

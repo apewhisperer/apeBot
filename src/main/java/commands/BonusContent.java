@@ -4,21 +4,21 @@ import java.util.Random;
 
 public class BonusContent {
 
-    public static String bony() {
+    static String bony() {
         return "https://media0.giphy.com/media/XfIeqsmLNJvFEndzMf/giphy.gif?cid=ecf05e47nqctj1e31vxeuur0ijx1j9d63p6nb7v0m6nmzx9l&rid=giphy.gif";
     }
 
-    public static String esteban() {
+    static String esteban() {
         return "**ahora hablo en serio**";
     }
 
-    public static String dumb() {
+    static String dumb() {
         return "no.";
     }
 
-    public static String wildMagicSurge() {
+    static String wildMagicSurge() {
 
-        Log.registerEvent("!wildsurge");
+        Log.registerEvent("!surge");
 
         Random random = new Random();
 
@@ -93,7 +93,7 @@ public class BonusContent {
                 return "For the next minute, you can teleport up to 20 feet as a bonus action on each of your turns.";
             case 45:
             case 46:
-                return "ou cast Levitate on yourself.";
+                return "You cast Levitate on yourself.";
             case 47:
             case 48:
                 return "A unicorn controlled by the DM appears in a space within 5 feet of you, then disappears 1 minute later. \t";
@@ -176,7 +176,6 @@ public class BonusContent {
             case 100:
                 return "You regain all expended sorcery points.";
         }
-
         return "something went bad";
     }
 }
