@@ -13,6 +13,7 @@ import java.util.Map;
 
 public final class TrackScheduler extends AudioEventAdapter implements AudioLoadResultHandler {
 
+    public boolean isStopped = false;
     private final AudioPlayer player;
     Map<Integer, AudioTrack> list = new HashMap<>();
     int position;
@@ -29,6 +30,18 @@ public final class TrackScheduler extends AudioEventAdapter implements AudioLoad
                 System.out.println("postion set to : " + i);
             }
         }
+    }
+
+    public Map<Integer, AudioTrack> getList() {
+        return list;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setStopped(boolean isStopped) {
+        this.isStopped = isStopped;
     }
 
     @Override
@@ -64,10 +77,15 @@ public final class TrackScheduler extends AudioEventAdapter implements AudioLoad
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
 
-        if (position < list.size() + 1 && endReason.mayStartNext) {
-            System.out.println("track end" + " pos: " + position);
-            position++;
-            player.playTrack(list.get(position));
+        if (position < list.size() + 1) {
+            if (endReason.mayStartNext) {
+                System.out.println("track end" + " pos: " + position);
+                position++;
+                player.playTrack(list.get(position));
+            } else if (endReason == AudioTrackEndReason.STOPPED) {
+                System.out.println("track stopped");
+                setStopped(true);
+            }
         }
     }
 }

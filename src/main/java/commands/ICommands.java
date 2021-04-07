@@ -9,6 +9,7 @@ import discord4j.core.object.reaction.ReactionEmoji;
 import discord4j.core.spec.MessageCreateSpec;
 import discord4j.rest.util.Color;
 import player.Player;
+import player.TrackScheduler;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -167,8 +168,16 @@ public interface ICommands {
         if (channel != null) {
             for (Map.Entry<VoiceChannel, Player> entry : Commands.channelPlayerMap.entrySet()) {
                 if (entry.getKey().equals(channel)) {
-                    if (command.size() == 1 && entry.getValue().getPlayer().isPaused()) {
-                        entry.getValue().getPlayer().setPaused(false);
+                    if (command.size() == 1) {
+                        TrackScheduler scheduler = entry.getValue().getScheduler();
+                        if (entry.getValue().getPlayer().isPaused()) {
+                            entry.getValue().getPlayer().setPaused(false);
+                        }
+                        if (scheduler.isStopped) {
+                            System.out.println("unstop");
+                            scheduler.setStopped(false);
+                            entry.getValue().getPlayer().playTrack(scheduler.getList().get(scheduler.getPosition()).makeClone());
+                        }
                         Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(playEmoji))).block();
                     } else if (command.size() == 2) {
                         if (entry.getValue().getPlayer().isPaused()) {
@@ -231,5 +240,19 @@ public interface ICommands {
                         messageCreateSpec.addFile("message.txt", targetStream);
                     }
                 }).block();
+    }
+
+    static void stop(String stopEmoji, MessageCreateEvent event) {
+        final Member member = event.getMember().orElse(null);
+        VoiceChannel channel = getChannel(member);
+
+        if (channel != null) {
+            for (Map.Entry<VoiceChannel, Player> entry : Commands.channelPlayerMap.entrySet()) {
+                if (entry.getKey().equals(channel)) {
+                    entry.getValue().getPlayer().stopTrack();
+                    Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(stopEmoji))).block();
+                }
+            }
+        }
     }
 }

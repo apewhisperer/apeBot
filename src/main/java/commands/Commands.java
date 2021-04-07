@@ -15,10 +15,11 @@ public class Commands implements ICommands {
 
         final Map<String, IExecute> commands = new HashMap<>();
         String playEmoji = "\u25B6";
-        String stopEmoji = "\u23F8";
+        String pauseEmoji = "\u23F8";
         String plusEmoji = "\u2B06";
         String minusEmoji = "\u2B07";
         String equalEmoji = "\u2195";
+        String stopEmoji = "\u23F9";
 
         commands.put("banana", event -> {
             ICommands.banana(event);
@@ -39,10 +40,10 @@ public class Commands implements ICommands {
             ICommands.play(playEmoji, event);
         });
         commands.put("stop", event -> {
-            ICommands.pause(stopEmoji, event);
+            ICommands.stop(stopEmoji, event);
         });
         commands.put("pause", event -> {
-            ICommands.pause(stopEmoji, event);
+            ICommands.pause(pauseEmoji, event);
         });
         commands.put("tip", event -> {
             ICommands.tip(event);
