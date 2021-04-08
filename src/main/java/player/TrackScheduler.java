@@ -7,6 +7,7 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
+import commands.PositionThread;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,19 +16,22 @@ public final class TrackScheduler extends AudioEventAdapter implements AudioLoad
 
     public boolean isStopped = false;
     public boolean isLoaded = false;
+    public boolean positionSet = false;
     private final AudioPlayer player;
-    Map<Integer, AudioTrack> list = new HashMap<>();
+    private final Map<Integer, AudioTrack> list = new HashMap<>();
     int position;
 
     public TrackScheduler(final AudioPlayer player) {
         this.player = player;
     }
 
-    private void setPosition(AudioTrack track) {
+    public void setPosition(AudioTrack track) {
 
+        positionSet = false;
         for (int i = 0; i < list.size(); i++) {
             if (track == list.get(i)) {
                 position = i;
+                positionSet = true;
                 System.out.println("postion set to : " + i);
             }
         }
@@ -45,16 +49,11 @@ public final class TrackScheduler extends AudioEventAdapter implements AudioLoad
         this.isStopped = isStopped;
     }
 
-    public boolean isLoaded() {
-        return isLoaded;
-    }
-
     @Override
     public void trackLoaded(final AudioTrack track) {
 
         isLoaded = false;
         list.put(list.size(), track);
-        setPosition(track);
         player.addListener(this);
         isLoaded = true;
     }
@@ -66,7 +65,6 @@ public final class TrackScheduler extends AudioEventAdapter implements AudioLoad
         for (int i = 0; i < playlist.getTracks().size(); i++) {
             list.put(position + i, playlist.getTracks().get(i));
         }
-        setPosition(playlist.getSelectedTrack());
         player.addListener(this);
         isLoaded = true;
     }

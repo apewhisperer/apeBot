@@ -176,7 +176,14 @@ public interface ICommands {
                         if (scheduler.isStopped) {
                             System.out.println("unstop");
                             scheduler.setStopped(false);
-                            entry.getValue().getPlayer().playTrack(scheduler.getList().get(scheduler.getPosition()));
+                            PositionThread positionThread = new PositionThread(scheduler);
+                            positionThread.start();
+                            try {
+                                positionThread.join();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            entry.getValue().getPlayer().startTrack(scheduler.getList().get(scheduler.getPosition()), false);
                         }
                         Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(playEmoji))).block();
                     } else if (command.size() == 2) {
@@ -190,7 +197,7 @@ public interface ICommands {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        entry.getValue().getPlayer().playTrack(scheduler.getList().get(scheduler.getPosition()));
+                        entry.getValue().getPlayer().playTrack(scheduler.getList().get(scheduler.getPosition()).makeClone());
                         Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(playEmoji))).block();
                     }
                 }
