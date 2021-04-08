@@ -6,15 +6,11 @@ import java.util.Random;
 public class DiceRoller {
 
     public static String roll(String message) {
-
         String details = "";
-
         int[] array = getArray(message);
-
         int number = array[0];
         int dice = array[1];
         int bonus = array[2];
-
         String result;
         Random random = new Random();
         int sum = 0;
@@ -37,20 +33,15 @@ public class DiceRoller {
     }
 
     private static int[] getArray(String message) {
-
         String noWhitespaceMessage = message.trim().replaceAll(" ", "");
-
         boolean isNegative = false;
         int[] array = new int[3];
-
         ArrayList<Character> diceNumberArray = new ArrayList<>();
         ArrayList<Character> diceTypeArray = new ArrayList<>();
         ArrayList<Character> bonusArray = new ArrayList<>();
-
         char[] diceNumberChar = noWhitespaceMessage.substring(0, (noWhitespaceMessage.indexOf("d"))).toCharArray();
         char[] diceTypeChar;
         char[] bonusChar = new char[0];
-
         if (noWhitespaceMessage.contains("+")) {
             diceTypeChar = noWhitespaceMessage.substring((noWhitespaceMessage.indexOf("d") + 1), noWhitespaceMessage.indexOf("+")).toCharArray();
             bonusChar = noWhitespaceMessage.substring(noWhitespaceMessage.indexOf("+") + 1).toCharArray();
@@ -61,7 +52,6 @@ public class DiceRoller {
         } else {
             diceTypeChar = noWhitespaceMessage.substring(noWhitespaceMessage.indexOf("d") + 1).toCharArray();
         }
-
         for (char c : diceNumberChar) {
             if (Character.isDigit(c)) {
                 diceNumberArray.add(c);

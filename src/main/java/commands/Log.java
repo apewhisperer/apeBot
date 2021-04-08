@@ -8,10 +8,8 @@ import java.util.Date;
 public class Log {
 
     static void registerEvent(String command) {
-
         File log = new File("log.txt");
         FileWriter fileWriter = null;
-
         if (log.length() > 100000) {
             log.delete();
         }

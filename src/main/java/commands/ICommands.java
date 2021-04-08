@@ -1,5 +1,6 @@
 package commands;
 
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.VoiceState;
 import discord4j.core.object.entity.Member;
@@ -22,7 +23,6 @@ import java.util.function.Consumer;
 public interface ICommands {
 
     static void banana(MessageCreateEvent event) {
-
         Objects.requireNonNull(event.getMessage().getChannel().block())
                 .createMessage(new Consumer<MessageCreateSpec>() {
                     @Override
@@ -36,26 +36,25 @@ public interface ICommands {
     static void changeVolume(String plusEmoji, String minusEmoji, String equalEmoji, MessageCreateEvent event) {
         final String content = event.getMessage().getContent();
         final List<String> command = Arrays.asList(content.split(" "));
-        String emoji;
-
         final Member member = event.getMember().orElse(null);
+        String emoji;
         VoiceChannel channel = getChannel(member);
-
         if (channel != null) {
             for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
                 if (entry.getKey().equals(channel)) {
                     if (command.size() > 1) {
                         int levelAfter = Integer.parseInt(command.get(1));
                         if (levelAfter >= 0 && levelAfter <= 100) {
-                            int current = entry.getValue().getPlayer().getVolume();
+                            AudioPlayer player = entry.getValue().getPlayer();
+                            int current = player.getVolume();
                             if (levelAfter == current) {
-                                entry.getValue().getPlayer().setVolume(levelAfter);
+                                player.setVolume(levelAfter);
                                 emoji = equalEmoji;
                             } else if (levelAfter > current) {
-                                entry.getValue().getPlayer().setVolume(levelAfter);
+                                player.setVolume(levelAfter);
                                 emoji = plusEmoji;
                             } else {
-                                entry.getValue().getPlayer().setVolume(levelAfter);
+                                player.setVolume(levelAfter);
                                 emoji = minusEmoji;
                             }
                             Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(emoji))).block();
@@ -103,9 +102,8 @@ public interface ICommands {
     }
 
     static void roll(MessageCreateEvent event) {
-        Log.registerEvent(event.getMessage().getContent());
         String command = DiceRoller.roll(event.getMessage().getContent().substring(1));
-
+        Log.registerEvent(event.getMessage().getContent());
         if (event.getMessage().getContent().length() > 2) {
             if (command.length() > Message.MAX_CONTENT_LENGTH) {
                 convertToFile(event, command);
@@ -120,9 +118,8 @@ public interface ICommands {
     }
 
     static void tip(MessageCreateEvent event) {
-        Log.registerEvent(event.getMessage().getContent());
         String command = TooltipReader.getTooltip(event.getMessage().getContent().substring(5));
-
+        Log.registerEvent(event.getMessage().getContent());
         if (event.getMessage().getContent().length() > 5) {
             if (command.length() > Message.MAX_CONTENT_LENGTH) {
                 convertToFile(event, command);
@@ -139,10 +136,8 @@ public interface ICommands {
     }
 
     static void pause(String stopEmoji, MessageCreateEvent event) {
-
         final Member member = event.getMember().orElse(null);
         VoiceChannel channel = getChannel(member);
-
         if (channel != null) {
             for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
                 if (entry.getKey().equals(channel)) {
@@ -156,48 +151,35 @@ public interface ICommands {
     }
 
     static void play(String playEmoji, MessageCreateEvent event) {
-        Log.registerEvent(event.getMessage().getContent());
-
-        join(event);
         final String content = event.getMessage().getContent();
         final List<String> command = Arrays.asList(content.split(" "));
-
         final Member member = event.getMember().orElse(null);
         VoiceChannel channel = getChannel(member);
-
+        Log.registerEvent(event.getMessage().getContent());
+        join(event);
         if (channel != null) {
             for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
                 if (entry.getKey().equals(channel)) {
                     TrackScheduler scheduler = entry.getValue().getScheduler();
+                    AudioPlayer player = entry.getValue().getPlayer();
                     if (command.size() == 1) {
-                        if (entry.getValue().getPlayer().isPaused()) {
-                            entry.getValue().getPlayer().setPaused(false);
+                        if (player.isPaused()) {
+                            player.setPaused(false);
                         }
-                        if (scheduler.isStopped) {
-                            System.out.println("unstop");
+                        if (scheduler.isStopped()) {
                             scheduler.setStopped(false);
-                            PositionThread positionThread = new PositionThread(scheduler);
-                            positionThread.start();
-                            try {
-                                positionThread.join();
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            entry.getValue().getPlayer().startTrack(scheduler.getList().get(scheduler.getPosition()), false);
+                            player.playTrack(scheduler.getList().get(scheduler.getPosition()).makeClone());
                         }
                         Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(playEmoji))).block();
                     } else if (command.size() == 2) {
-                        if (entry.getValue().getPlayer().isPaused()) {
-                            entry.getValue().getPlayer().setPaused(false);
+                        if (player.isPaused()) {
+                            player.setPaused(false);
                         }
-                        LoadThread loadThread = new LoadThread(command.get(1), entry.getValue());
-                        loadThread.start();
-                        try {
-                            loadThread.join();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        entry.getValue().getPlayer().playTrack(scheduler.getList().get(scheduler.getPosition()).makeClone());
+                        scheduler.clearList();
+                        scheduler.setPosition(0);
+                        initLoadThread(command.get(1), entry.getValue());
+                        scheduler.setLoaded(false);
+                        player.playTrack(scheduler.getList().get(scheduler.getPosition()));
                         Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(playEmoji))).block();
                     }
                 }
@@ -205,11 +187,20 @@ public interface ICommands {
         }
     }
 
+    private static void initLoadThread(String link, PlayerController playerController) {
+        LoadThread loadThread = new LoadThread(link, playerController);
+        loadThread.start();
+        try {
+            loadThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     static void join(MessageCreateEvent event) {
         PlayerController playerController = new PlayerController();
         final Member member = event.getMember().orElse(null);
         VoiceChannel channel = getChannel(member);
-
         if (channel != null) {
             if (!Commands.channelPlayerMap.containsKey(channel)) {
                 Commands.channelPlayerMap.put(channel, playerController);
@@ -221,13 +212,11 @@ public interface ICommands {
     static void quit(MessageCreateEvent event) {
         final Member member = event.getMember().orElse(null);
         VoiceChannel channel = getChannel(member);
-
         if (channel != null) {
             for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
                 if (entry.getKey().equals(channel)) {
                     entry.getValue().getPlayer().destroy();
                     Commands.channelPlayerMap.remove(entry.getKey(), entry.getValue());
-                    System.out.println("player destroyed");
                     channel.sendDisconnectVoiceState().block();
                 }
             }
@@ -246,7 +235,6 @@ public interface ICommands {
 
     static void convertToFile(MessageCreateEvent event, String command) {
         InputStream targetStream = new ByteArrayInputStream(command.getBytes());
-
         Objects.requireNonNull(event.getMessage().getChannel().block())
                 .createMessage(new Consumer<MessageCreateSpec>() {
                     @Override
@@ -259,7 +247,6 @@ public interface ICommands {
     static void stop(String stopEmoji, MessageCreateEvent event) {
         final Member member = event.getMember().orElse(null);
         VoiceChannel channel = getChannel(member);
-
         if (channel != null) {
             for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
                 if (entry.getKey().equals(channel)) {

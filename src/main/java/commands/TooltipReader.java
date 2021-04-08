@@ -1,7 +1,5 @@
 package commands;
 
-import discord4j.core.object.entity.Message;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -11,9 +9,7 @@ import java.nio.charset.StandardCharsets;
 public class TooltipReader {
 
     public static String getTooltip(String spellName) {
-
         spellName = spellName.replaceAll(" ", "-");
-
         BufferedReader bufferedReader = null;
         try {
             URL url = new URL("http://dnd5e.wikidot.com/spell:" + spellName);
@@ -23,7 +19,6 @@ public class TooltipReader {
             String currentLineLevel2;
             String currentLineLevel3;
             String tooltip = "";
-
             while ((currentLineLevel1 = bufferedReader.readLine()) != null) {
                 if (currentLineLevel1.contains(foundWord)) {
                     while ((currentLineLevel2 = bufferedReader.readLine()) != null) {
@@ -65,12 +60,5 @@ public class TooltipReader {
                 .replaceAll("<strong>", "**")
                 .replaceAll("</strong>", "**");
         return converted;
-    }
-
-    private static String trimTo2000Chars(String tooltip) {
-        if (tooltip.length() > Message.MAX_CONTENT_LENGTH) {
-            return tooltip.substring(0, 1995) + "[...]";
-        }
-        return tooltip;
     }
 }

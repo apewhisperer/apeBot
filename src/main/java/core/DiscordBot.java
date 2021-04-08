@@ -19,27 +19,21 @@ public class DiscordBot {
     }
 
     public static void main(String[] args) {
-
         Dotenv dotenv = Dotenv.load();
-
         GatewayDiscordClient client = DiscordClientBuilder.create(Objects.requireNonNull(dotenv.get("TOKEN")))
                 .build()
                 .login()
                 .block();
-
         assert client != null;
         run(client);
     }
 
     private static void run(GatewayDiscordClient client) {
-
         client.getEventDispatcher().on(ReadyEvent.class)
                 .subscribe(event -> Events.onReady(event, client));
-
         client.getEventDispatcher().on(MessageCreateEvent.class)
                 .filter(event -> event.getMessage().getAuthor().map(user -> !user.isBot()).orElse(false))
                 .subscribe(event -> Events.onMessageCreated(event, commands));
-
         client.onDisconnect().block();
     }
 }

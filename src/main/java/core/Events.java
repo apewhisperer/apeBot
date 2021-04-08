@@ -13,9 +13,7 @@ import java.util.Objects;
 public class Events {
 
     public static void onMessageCreated(MessageCreateEvent event, Map<String, IExecute> commands) {
-
         final String content = event.getMessage().getContent();
-
         if (content.matches("^!(\\d+)?d\\d+([+-][d0-9]+)*(;(\\d+)?d\\d+([+-][d0-9]+)*)*;?")) {
             commands.get("d").execute(event);
             return;
@@ -33,9 +31,7 @@ public class Events {
     }
 
     public static void onReady(ReadyEvent event, GatewayDiscordClient client) {
-
         final User user = event.getSelf();
-
         client.updatePresence(Presence.online(Activity.listening("!help"))).subscribe();
         System.out.printf("Logged in as %s#%s%n", user.getUsername(), user.getDiscriminator());
     }

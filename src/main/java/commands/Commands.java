@@ -12,7 +12,6 @@ public class Commands implements ICommands {
     static Map<VoiceChannel, PlayerController> channelPlayerMap = new HashMap<>();
 
     public static Map<String, IExecute> getCommands() {
-
         final Map<String, IExecute> commands = new HashMap<>();
         String playEmoji = "\u25B6";
         String pauseEmoji = "\u23F8";
@@ -20,7 +19,6 @@ public class Commands implements ICommands {
         String minusEmoji = "\u2B07";
         String equalEmoji = "\u2195";
         String stopEmoji = "\u23F9";
-
         commands.put("banana", event -> {
             ICommands.banana(event);
         });
