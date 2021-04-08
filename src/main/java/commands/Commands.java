@@ -12,55 +12,55 @@ public class Commands implements ICommands {
     static Map<VoiceChannel, PlayerController> channelPlayerMap = new HashMap<>();
 
     public static Map<String, IExecute> getCommands() {
-        final Map<String, IExecute> commands = new HashMap<>();
+        final Map<String, IExecute> COMMANDS = new HashMap<>();
         String playEmoji = "\u25B6";
         String pauseEmoji = "\u23F8";
         String plusEmoji = "\u2B06";
         String minusEmoji = "\u2B07";
         String equalEmoji = "\u2195";
         String stopEmoji = "\u23F9";
-        commands.put("banana", event -> {
+        COMMANDS.put("banana", event -> {
             ICommands.banana(event);
         });
-        commands.put("volume", event -> {
+        COMMANDS.put("volume", event -> {
             ICommands.changeVolume(plusEmoji, minusEmoji, equalEmoji, event);
         });
-        commands.put("join", event -> {
+        COMMANDS.put("join", event -> {
             ICommands.join(event);
         });
-        commands.put("leave", event -> {
+        COMMANDS.put("leave", event -> {
             ICommands.quit(event);
         });
-        commands.put("quit", event -> {
+        COMMANDS.put("quit", event -> {
             ICommands.quit(event);
         });
-        commands.put("play", event -> {
+        COMMANDS.put("play", event -> {
             ICommands.play(playEmoji, event);
         });
-        commands.put("stop", event -> {
+        COMMANDS.put("stop", event -> {
             ICommands.stop(stopEmoji, event);
         });
-        commands.put("pause", event -> {
+        COMMANDS.put("pause", event -> {
             ICommands.pause(pauseEmoji, event);
         });
-        commands.put("tip", event -> {
+        COMMANDS.put("tip", event -> {
             ICommands.tip(event);
         });
-        commands.put("d", event -> {
+        COMMANDS.put("d", event -> {
             ICommands.roll(event);
         });
-        commands.put("surge", event -> {
+        COMMANDS.put("surge", event -> {
             ICommands.surge(event);
         });
-        commands.put("bony", event -> {
+        COMMANDS.put("bony", event -> {
             ICommands.printBony(event);
         });
-        commands.put("help", event -> {
+        COMMANDS.put("help", event -> {
             ICommands.help(event);
         });
-        commands.put("info", event -> {
+        COMMANDS.put("info", event -> {
             ICommands.printInfo(event);
         });
-        return commands;
+        return COMMANDS;
     }
 }

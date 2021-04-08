@@ -14,8 +14,8 @@ public class LoadThread extends Thread {
 
     @Override
     public void run() {
-        playerController.getPlayerManager().loadItem(link, playerController.getScheduler());
-        while (!playerController.getScheduler().isLoaded()) {
+        playerController.getPLAYER_MANAGER().loadItem(link, playerController.getSCHEDULER());
+        while (!playerController.getSCHEDULER().isLoaded()) {
             try {
                 Thread.sleep(1);
             } catch (InterruptedException e) {

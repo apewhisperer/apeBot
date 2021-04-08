@@ -9,40 +9,40 @@ import discord4j.voice.AudioProvider;
 
 public class PlayerController {
 
-    private final AudioPlayerManager playerManager = new DefaultAudioPlayerManager();
-    private final AudioPlayer player = playerManager.createPlayer();
-    private final AudioProvider provider = new PlayerProvider(player);
-    private final TrackScheduler scheduler = new TrackScheduler(player);
+    private final AudioPlayerManager PLAYER_MANAGER = new DefaultAudioPlayerManager();
+    private final AudioPlayer PLAYER = PLAYER_MANAGER.createPlayer();
+    private final AudioProvider PROVIDER = new PlayerProvider(PLAYER);
+    private final TrackScheduler SCHEDULER = new TrackScheduler(PLAYER);
 
     public PlayerController() {
-        player.setVolume(10);
+        PLAYER.setVolume(10);
         init();
     }
 
-    public TrackScheduler getScheduler() {
-        return scheduler;
+    public TrackScheduler getSCHEDULER() {
+        return SCHEDULER;
     }
 
-    public AudioPlayerManager getPlayerManager() {
-        return playerManager;
+    public AudioPlayerManager getPLAYER_MANAGER() {
+        return PLAYER_MANAGER;
     }
 
-    public AudioPlayer getPlayer() {
-        return player;
+    public AudioPlayer getPLAYER() {
+        return PLAYER;
     }
 
-    public AudioProvider getProvider() {
-        return provider;
+    public AudioProvider getPROVIDER() {
+        return PROVIDER;
     }
 
 
     private void init() {
         // This is an optimization strategy that Discord4J can utilize.
         // It is not important to understand
-        playerManager.getConfiguration()
+        PLAYER_MANAGER.getConfiguration()
                 .setFrameBufferFactory(NonAllocatingAudioFrameBuffer::new);
 
         // Allow playerManager to parse remote sources like YouTube links
-        AudioSourceManagers.registerRemoteSources(playerManager);
+        AudioSourceManagers.registerRemoteSources(PLAYER_MANAGER);
     }
 }

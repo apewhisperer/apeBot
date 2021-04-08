@@ -12,10 +12,10 @@ import java.util.Objects;
 
 public class DiscordBot {
 
-    private static final Map<String, IExecute> commands;
+    private static final Map<String, IExecute> COMMANDS;
 
     static {
-        commands = Commands.getCommands();
+        COMMANDS = Commands.getCommands();
     }
 
     public static void main(String[] args) {
@@ -33,7 +33,7 @@ public class DiscordBot {
                 .subscribe(event -> Events.onReady(event, client));
         client.getEventDispatcher().on(MessageCreateEvent.class)
                 .filter(event -> event.getMessage().getAuthor().map(user -> !user.isBot()).orElse(false))
-                .subscribe(event -> Events.onMessageCreated(event, commands));
+                .subscribe(event -> Events.onMessageCreated(event, COMMANDS));
         client.onDisconnect().block();
     }
 }

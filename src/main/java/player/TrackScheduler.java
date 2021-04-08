@@ -13,15 +13,15 @@ import java.util.Map;
 
 public final class TrackScheduler extends AudioEventAdapter implements AudioLoadResultHandler {
 
-    private final AudioPlayer player;
-    private final Map<Integer, AudioTrack> list;
+    private final AudioPlayer PLAYER;
+    private final Map<Integer, AudioTrack> LIST;
     private boolean isStopped;
     private boolean isLoaded;
     private int position;
 
-    public TrackScheduler(final AudioPlayer player) {
-        list = new HashMap<>();
-        this.player = player;
+    public TrackScheduler(final AudioPlayer PLAYER) {
+        LIST = new HashMap<>();
+        this.PLAYER = PLAYER;
         isStopped = false;
         isLoaded = false;
         position = 0;
@@ -29,7 +29,7 @@ public final class TrackScheduler extends AudioEventAdapter implements AudioLoad
 
     public void clearList() {
         System.out.println("clearlist");
-        list.clear();
+        LIST.clear();
     }
 
     public boolean isStopped() {
@@ -49,16 +49,16 @@ public final class TrackScheduler extends AudioEventAdapter implements AudioLoad
     }
 
     public void getPosition(AudioTrack track) {
-        for (int i = 0; i < list.size(); i++) {
-            if (track == list.get(i)) {
+        for (int i = 0; i < LIST.size(); i++) {
+            if (track == LIST.get(i)) {
                 position = i;
                 System.out.println("postion: " + i);
             }
         }
     }
 
-    public Map<Integer, AudioTrack> getList() {
-        return list;
+    public Map<Integer, AudioTrack> getLIST() {
+        return LIST;
     }
 
     public int getPosition() {
@@ -70,20 +70,20 @@ public final class TrackScheduler extends AudioEventAdapter implements AudioLoad
     }
 
     @Override
-    public void trackLoaded(final AudioTrack track) {
+    public void trackLoaded(final AudioTrack TRACK) {
         isLoaded = false;
-        list.put(list.size(), track);
-        player.addListener(this);
+        LIST.put(LIST.size(), TRACK);
+        PLAYER.addListener(this);
         isLoaded = true;
     }
 
     @Override
-    public void playlistLoaded(final AudioPlaylist playlist) {
+    public void playlistLoaded(final AudioPlaylist PLAYLIST) {
         isLoaded = false;
-        for (int i = (int) playlist.getSelectedTrack().getPosition(); i < playlist.getTracks().size() - playlist.getSelectedTrack().getPosition(); i++) {
-            list.put((int) (position + i - playlist.getSelectedTrack().getPosition()), playlist.getTracks().get((int) (i + playlist.getSelectedTrack().getPosition())));
+        for (int i = (int) PLAYLIST.getSelectedTrack().getPosition(); i < PLAYLIST.getTracks().size() - PLAYLIST.getSelectedTrack().getPosition(); i++) {
+            LIST.put((int) (position + i - PLAYLIST.getSelectedTrack().getPosition()), PLAYLIST.getTracks().get((int) (i + PLAYLIST.getSelectedTrack().getPosition())));
         }
-        player.addListener(this);
+        PLAYER.addListener(this);
         isLoaded = true;
     }
 
@@ -93,17 +93,17 @@ public final class TrackScheduler extends AudioEventAdapter implements AudioLoad
     }
 
     @Override
-    public void loadFailed(final FriendlyException exception) {
+    public void loadFailed(FriendlyException exception) {
         System.out.println("track load failed");
     }
 
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
-        if (position < list.size() + 1) {
+        if (position < LIST.size() + 1) {
             if (endReason.mayStartNext) {
                 System.out.println("track end" + " pos: " + position);
                 position++;
-                player.playTrack(list.get(position));
+                player.playTrack(LIST.get(position));
             } else if (endReason == AudioTrackEndReason.STOPPED) {
                 System.out.println("track stopped");
                 setStopped(true);
