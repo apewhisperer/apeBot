@@ -19,19 +19,19 @@ public class PlayerController {
         init();
     }
 
-    public TrackScheduler getSCHEDULER() {
+    public TrackScheduler getScheduler() {
         return SCHEDULER;
     }
 
-    public AudioPlayerManager getPLAYER_MANAGER() {
+    public AudioPlayerManager getPlayerManager() {
         return PLAYER_MANAGER;
     }
 
-    public AudioPlayer getPLAYER() {
+    public AudioPlayer getPlayer() {
         return PLAYER;
     }
 
-    public AudioProvider getPROVIDER() {
+    public AudioProvider getProvider() {
         return PROVIDER;
     }
 

@@ -57,7 +57,7 @@ public final class TrackScheduler extends AudioEventAdapter implements AudioLoad
         }
     }
 
-    public Map<Integer, AudioTrack> getLIST() {
+    public Map<Integer, AudioTrack> getList() {
         return LIST;
     }
 

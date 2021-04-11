@@ -47,7 +47,7 @@ public interface ICommands {
                     if (COMMAND.size() > 1) {
                         int levelAfter = Integer.parseInt(COMMAND.get(1));
                         if (levelAfter >= 0 && levelAfter <= 100) {
-                            AudioPlayer player = entry.getValue().getPLAYER();
+                            AudioPlayer player = entry.getValue().getPlayer();
                             int current = player.getVolume();
                             if (levelAfter == current) {
                                 player.setVolume(levelAfter);
@@ -143,8 +143,8 @@ public interface ICommands {
         if (channel != null) {
             for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
                 if (entry.getKey().equals(channel)) {
-                    if (!entry.getValue().getPLAYER().isPaused()) {
-                        entry.getValue().getPLAYER().setPaused(true);
+                    if (!entry.getValue().getPlayer().isPaused()) {
+                        entry.getValue().getPlayer().setPaused(true);
                         Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(stopEmoji))).block();
                     }
                 }
@@ -162,15 +162,15 @@ public interface ICommands {
         if (channel != null) {
             for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
                 if (entry.getKey().equals(channel)) {
-                    TrackScheduler scheduler = entry.getValue().getSCHEDULER();
-                    AudioPlayer player = entry.getValue().getPLAYER();
+                    TrackScheduler scheduler = entry.getValue().getScheduler();
+                    AudioPlayer player = entry.getValue().getPlayer();
                     if (COMMAND.size() == 1) {
                         if (player.isPaused()) {
                             player.setPaused(false);
                         }
                         if (scheduler.isStopped()) {
                             scheduler.setStopped(false);
-                            player.playTrack(scheduler.getLIST().get(scheduler.getPosition()).makeClone());
+                            player.playTrack(scheduler.getList().get(scheduler.getPosition()).makeClone());
                         }
                         Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(playEmoji))).block();
                     } else if (COMMAND.size() == 2) {
@@ -181,7 +181,7 @@ public interface ICommands {
                         scheduler.setPosition(0);
                         initLoadThread(COMMAND.get(1), entry.getValue());
                         scheduler.setLoaded(false);
-                        player.playTrack(scheduler.getLIST().get(scheduler.getPosition()));
+                        player.playTrack(scheduler.getList().get(scheduler.getPosition()));
                         Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(playEmoji))).block();
                     }
                 }
@@ -207,7 +207,7 @@ public interface ICommands {
             if (!Commands.channelPlayerMap.containsKey(channel)) {
                 Commands.channelPlayerMap.put(channel, playerController);
             }
-            channel.join(spec -> spec.setProvider(playerController.getPROVIDER())).block();
+            channel.join(spec -> spec.setProvider(playerController.getProvider())).block();
         }
     }
 
@@ -217,7 +217,7 @@ public interface ICommands {
         if (channel != null) {
             for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
                 if (entry.getKey().equals(channel)) {
-                    entry.getValue().getPLAYER().destroy();
+                    entry.getValue().getPlayer().destroy();
                     Commands.channelPlayerMap.remove(entry.getKey(), entry.getValue());
                     channel.sendDisconnectVoiceState().block();
                 }
@@ -252,7 +252,7 @@ public interface ICommands {
         if (channel != null) {
             for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
                 if (entry.getKey().equals(channel)) {
-                    entry.getValue().getPLAYER().stopTrack();
+                    entry.getValue().getPlayer().stopTrack();
                     Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(stopEmoji))).block();
                 }
             }
