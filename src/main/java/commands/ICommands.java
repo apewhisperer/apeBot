@@ -1,6 +1,7 @@
 package commands;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.VoiceState;
 import discord4j.core.object.entity.Member;
@@ -24,7 +25,7 @@ import static commands.Help.*;
 
 public interface ICommands {
 
-    static void banana(MessageCreateEvent event) {
+    static void useTts(MessageCreateEvent event) {
         Objects.requireNonNull(event.getMessage().getChannel().block())
                 .createMessage(new Consumer<MessageCreateSpec>() {
                     @Override
@@ -33,6 +34,44 @@ public interface ICommands {
                         messageCreateSpec.setContent("go eat a banana");
                     }
                 }).block();
+    }
+
+    static void printBony(MessageCreateEvent event) {
+        Objects.requireNonNull(event.getMessage().getChannel().block())
+                .createMessage(BonusContent.bony()).block();
+    }
+
+    static void printList(MessageCreateEvent event) {
+        final Member MEMBER = event.getMember().orElse(null);
+        VoiceChannel channel = getChannel(MEMBER);
+        if (channel != null) {
+            for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
+                if (entry.getKey().equals(channel)) {
+                    Map<Integer, AudioTrack> list = entry.getValue().getScheduler().getList();
+                    Objects.requireNonNull(event.getMessage().getChannel().block())
+                            .createEmbed(embed -> embed.setColor(Color.DARK_GOLDENROD)
+                                    .setDescription(printList(list, entry.getValue()))).subscribe();
+                }
+            }
+        }
+    }
+
+    static String printList(Map<Integer, AudioTrack> list, PlayerController playerController) {
+
+        Map<Integer, AudioTrack> embedList = list;
+        String stringList = "";
+        int position = 1;
+
+        for (Map.Entry<Integer, AudioTrack> entry : embedList.entrySet()) {
+            stringList = stringList.concat(String.valueOf(position)).concat(". ");
+            if ((position - 1) == playerController.getScheduler().getPosition()) {
+                stringList = stringList.concat("\u25B6 ");
+            }
+            stringList = stringList.concat(entry.getValue().getInfo().title).concat("\n");
+            position++;
+        }
+
+        return stringList;
     }
 
     static void changeVolume(String plusEmoji, String minusEmoji, String equalEmoji, MessageCreateEvent event) {
@@ -90,11 +129,6 @@ public interface ICommands {
                         .addField(pauseCode(), pauseInfo(), false)
                         .addField(volumeCode(), volumeInfo(), false)
                         .addField(surgeCode(), surgeInfo(), false)).subscribe();
-    }
-
-    static void printBony(MessageCreateEvent event) {
-        Objects.requireNonNull(event.getMessage().getChannel().block())
-                .createMessage(BonusContent.bony()).block();
     }
 
     static void surge(MessageCreateEvent event) {
@@ -165,16 +199,21 @@ public interface ICommands {
                     TrackScheduler scheduler = entry.getValue().getScheduler();
                     AudioPlayer player = entry.getValue().getPlayer();
                     if (COMMAND.size() == 1) {
-                        if (player.isPaused()) {
-                            player.setPaused(false);
-                        }
-                        if (scheduler.isStopped()) {
-                            scheduler.setStopped(false);
-                            if (scheduler.getList().size() > 0) {
-                                player.playTrack(scheduler.getList().get(scheduler.getPosition()).makeClone());
-                            }
-                        }
                         if (scheduler.getList().size() > 0) {
+                            if (player.isPaused()) {
+                                player.setPaused(false);
+                                Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(playEmoji))).block();
+                                return;
+                            }
+                            if (scheduler.isStopped()) {
+                                scheduler.setStopped(false);
+                                if (scheduler.getList().size() > 0) {
+                                    player.playTrack(scheduler.getList().get(scheduler.getPosition()).makeClone());
+                                    Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(playEmoji))).block();
+                                    return;
+                                }
+                            }
+                            player.playTrack(scheduler.getList().get(scheduler.getPosition()));
                             Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(playEmoji))).block();
                         } else {
                             Objects.requireNonNull(event.getMessage().getChannel().block())
@@ -184,6 +223,8 @@ public interface ICommands {
                         if (player.isPaused()) {
                             player.setPaused(false);
                         }
+                        scheduler.clearList();
+                        scheduler.setPosition(0);
                         initLoadThread(COMMAND.get(1), entry.getValue());
                         if (!scheduler.isFailed()) {
                             player.playTrack(scheduler.getList().get(scheduler.getPosition()));
@@ -264,6 +305,91 @@ public interface ICommands {
                 if (entry.getKey().equals(channel)) {
                     entry.getValue().getPlayer().stopTrack();
                     Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(stopEmoji))).block();
+                }
+            }
+        }
+    }
+
+    static void queue(String checkEmoji, MessageCreateEvent event) {
+        final String CONTENT = event.getMessage().getContent();
+        final List<String> COMMAND = Arrays.asList(CONTENT.split(" "));
+        final Member MEMBER = event.getMember().orElse(null);
+        VoiceChannel channel = getChannel(MEMBER);
+        Log.registerEvent(event.getMessage().getContent());
+        join(event);
+        if (channel != null) {
+            for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
+                if (entry.getKey().equals(channel)) {
+                    TrackScheduler scheduler = entry.getValue().getScheduler();
+                    if (COMMAND.size() == 2) {
+                        initLoadThread(COMMAND.get(1), entry.getValue());
+                        if (!scheduler.isFailed()) {
+                            Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(checkEmoji))).block();
+                        } else {
+                            Objects.requireNonNull(event.getMessage().getChannel().block())
+                                    .createMessage("invalid link").subscribe();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    static void playNext(String nextEmoji, MessageCreateEvent event) {
+        final String CONTENT = event.getMessage().getContent();
+        final List<String> COMMAND = Arrays.asList(CONTENT.split(" "));
+        final Member MEMBER = event.getMember().orElse(null);
+        VoiceChannel channel = getChannel(MEMBER);
+        Log.registerEvent(event.getMessage().getContent());
+        join(event);
+        if (channel != null) {
+            for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
+                if (entry.getKey().equals(channel)) {
+                    TrackScheduler scheduler = entry.getValue().getScheduler();
+                    AudioPlayer player = entry.getValue().getPlayer();
+                    if (scheduler.getList().size() > 0) {
+                        if (scheduler.getList().size() > scheduler.getPosition() + 1) {
+                            scheduler.setPosition(scheduler.getPosition() + 1);
+                            player.playTrack(scheduler.getList().get(scheduler.getPosition()).makeClone());
+                            Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(nextEmoji))).block();
+                        } else {
+                            Objects.requireNonNull(event.getMessage().getChannel().block())
+                                    .createMessage("queue end!").subscribe();
+                        }
+                    } else {
+                        Objects.requireNonNull(event.getMessage().getChannel().block())
+                                .createMessage("queue is empty!").subscribe();
+                    }
+                }
+            }
+        }
+    }
+
+    static void playLast(String nextEmoji, MessageCreateEvent event) {
+        final String CONTENT = event.getMessage().getContent();
+        final List<String> COMMAND = Arrays.asList(CONTENT.split(" "));
+        final Member MEMBER = event.getMember().orElse(null);
+        VoiceChannel channel = getChannel(MEMBER);
+        Log.registerEvent(event.getMessage().getContent());
+        join(event);
+        if (channel != null) {
+            for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
+                if (entry.getKey().equals(channel)) {
+                    TrackScheduler scheduler = entry.getValue().getScheduler();
+                    AudioPlayer player = entry.getValue().getPlayer();
+                    if (scheduler.getList().size() > 0) {
+                        if (scheduler.getPosition() - 1 >= 0) {
+                            scheduler.setPosition(scheduler.getPosition() - 1);
+                            player.playTrack(scheduler.getList().get(scheduler.getPosition()).makeClone());
+                            Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(nextEmoji))).block();
+                        } else {
+                            Objects.requireNonNull(event.getMessage().getChannel().block())
+                                    .createMessage("queue beginning!").subscribe();
+                        }
+                    } else {
+                        Objects.requireNonNull(event.getMessage().getChannel().block())
+                                .createMessage("queue is empty!").subscribe();
+                    }
                 }
             }
         }
