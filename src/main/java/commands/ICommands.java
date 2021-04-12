@@ -170,19 +170,28 @@ public interface ICommands {
                         }
                         if (scheduler.isStopped()) {
                             scheduler.setStopped(false);
-                            player.playTrack(scheduler.getList().get(scheduler.getPosition()).makeClone());
+                            if (scheduler.getList().size() > 0) {
+                                player.playTrack(scheduler.getList().get(scheduler.getPosition()).makeClone());
+                            }
                         }
-                        Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(playEmoji))).block();
+                        if (scheduler.getList().size() > 0) {
+                            Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(playEmoji))).block();
+                        } else {
+                            Objects.requireNonNull(event.getMessage().getChannel().block())
+                                    .createMessage("queue is empty!").subscribe();
+                        }
                     } else if (COMMAND.size() == 2) {
                         if (player.isPaused()) {
                             player.setPaused(false);
                         }
-                        scheduler.clearList();
-                        scheduler.setPosition(0);
                         initLoadThread(COMMAND.get(1), entry.getValue());
-                        scheduler.setLoaded(false);
-                        player.playTrack(scheduler.getList().get(scheduler.getPosition()));
-                        Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(playEmoji))).block();
+                        if (!scheduler.isFailed()) {
+                            player.playTrack(scheduler.getList().get(scheduler.getPosition()));
+                            Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(playEmoji))).block();
+                        } else {
+                            Objects.requireNonNull(event.getMessage().getChannel().block())
+                                    .createMessage("invalid link").subscribe();
+                        }
                     }
                 }
             }
@@ -197,6 +206,7 @@ public interface ICommands {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        playerController.getScheduler().setLoaded(false);
     }
 
     static void join(MessageCreateEvent event) {

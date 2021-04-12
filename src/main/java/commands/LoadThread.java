@@ -1,6 +1,7 @@
 package commands;
 
 import player.PlayerController;
+import player.TrackScheduler;
 
 public class LoadThread extends Thread {
 
@@ -14,6 +15,10 @@ public class LoadThread extends Thread {
 
     @Override
     public void run() {
+
+        TrackScheduler scheduler = playerController.getScheduler();
+        scheduler.clearList();
+        scheduler.setPosition(0);
         playerController.getPlayerManager().loadItem(link, playerController.getScheduler());
         while (!playerController.getScheduler().isLoaded()) {
             try {
