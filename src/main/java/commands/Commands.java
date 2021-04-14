@@ -49,9 +49,6 @@ public class Commands implements ICommands {
         COMMANDS.put("play", event -> {
             ICommands.play(playEmoji, event);
         });
-        COMMANDS.put("p", event -> {
-            ICommands.play(playEmoji, event);
-        });
         COMMANDS.put("stop", event -> {
             ICommands.stop(stopEmoji, event);
         });
@@ -76,19 +73,10 @@ public class Commands implements ICommands {
         COMMANDS.put("queue", event -> {
             ICommands.queue(checkEmoji, event);
         });
-        COMMANDS.put("q", event -> {
-            ICommands.queue(checkEmoji, event);
-        });
         COMMANDS.put("next", event -> {
             ICommands.playNext(nextEmoji, event);
         });
-        COMMANDS.put("n", event -> {
-            ICommands.playNext(nextEmoji, event);
-        });
         COMMANDS.put("last", event -> {
-            ICommands.playLast(lastEmoji, event);
-        });
-        COMMANDS.put("l", event -> {
             ICommands.playLast(lastEmoji, event);
         });
         return COMMANDS;

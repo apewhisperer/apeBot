@@ -50,18 +50,19 @@ public interface ICommands {
                     Map<Integer, AudioTrack> list = entry.getValue().getScheduler().getList();
                     Objects.requireNonNull(event.getMessage().getChannel().block())
                             .createEmbed(embed -> embed.setColor(Color.DARK_GOLDENROD)
-                                    .setDescription(printList(list, entry.getValue()))).subscribe();
+                                    .setDescription(getList(list, entry.getValue()))).subscribe();
                 }
             }
+        } else {
+            Objects.requireNonNull(event.getMessage().getChannel().block())
+                    .createMessage("join voice channel first").subscribe();
         }
     }
 
-    static String printList(Map<Integer, AudioTrack> list, PlayerController playerController) {
-
+    static String getList(Map<Integer, AudioTrack> list, PlayerController playerController) {
         Map<Integer, AudioTrack> embedList = list;
         String stringList = "";
         int position = 1;
-
         for (Map.Entry<Integer, AudioTrack> entry : embedList.entrySet()) {
             stringList = stringList.concat(String.valueOf(position)).concat(". ");
             if ((position - 1) == playerController.getScheduler().getPosition()) {
@@ -70,7 +71,6 @@ public interface ICommands {
             stringList = stringList.concat(entry.getValue().getInfo().title).concat("\n");
             position++;
         }
-
         return stringList;
     }
 
@@ -106,6 +106,9 @@ public interface ICommands {
                     }
                 }
             }
+        } else {
+            Objects.requireNonNull(event.getMessage().getChannel().block())
+                    .createMessage("join voice channel first").subscribe();
         }
     }
 
@@ -183,6 +186,9 @@ public interface ICommands {
                     }
                 }
             }
+        } else {
+            Objects.requireNonNull(event.getMessage().getChannel().block())
+                    .createMessage("join voice channel first").subscribe();
         }
     }
 
@@ -236,6 +242,9 @@ public interface ICommands {
                     }
                 }
             }
+        } else {
+            Objects.requireNonNull(event.getMessage().getChannel().block())
+                    .createMessage("join voice channel first").subscribe();
         }
     }
 
@@ -273,6 +282,9 @@ public interface ICommands {
                     channel.sendDisconnectVoiceState().block();
                 }
             }
+        } else {
+            Objects.requireNonNull(event.getMessage().getChannel().block())
+                    .createMessage("join voice channel first").subscribe();
         }
     }
 
@@ -307,6 +319,9 @@ public interface ICommands {
                     Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(stopEmoji))).block();
                 }
             }
+        } else {
+            Objects.requireNonNull(event.getMessage().getChannel().block())
+                    .createMessage("join voice channel first").subscribe();
         }
     }
 
@@ -332,12 +347,13 @@ public interface ICommands {
                     }
                 }
             }
+        } else {
+            Objects.requireNonNull(event.getMessage().getChannel().block())
+                    .createMessage("join voice channel first").subscribe();
         }
     }
 
     static void playNext(String nextEmoji, MessageCreateEvent event) {
-        final String CONTENT = event.getMessage().getContent();
-        final List<String> COMMAND = Arrays.asList(CONTENT.split(" "));
         final Member MEMBER = event.getMember().orElse(null);
         VoiceChannel channel = getChannel(MEMBER);
         Log.registerEvent(event.getMessage().getContent());
@@ -362,12 +378,13 @@ public interface ICommands {
                     }
                 }
             }
+        } else {
+            Objects.requireNonNull(event.getMessage().getChannel().block())
+                    .createMessage("join voice channel first").subscribe();
         }
     }
 
     static void playLast(String nextEmoji, MessageCreateEvent event) {
-        final String CONTENT = event.getMessage().getContent();
-        final List<String> COMMAND = Arrays.asList(CONTENT.split(" "));
         final Member MEMBER = event.getMember().orElse(null);
         VoiceChannel channel = getChannel(MEMBER);
         Log.registerEvent(event.getMessage().getContent());
@@ -392,6 +409,9 @@ public interface ICommands {
                     }
                 }
             }
+        } else {
+            Objects.requireNonNull(event.getMessage().getChannel().block())
+                    .createMessage("join voice channel first").subscribe();
         }
     }
 }
