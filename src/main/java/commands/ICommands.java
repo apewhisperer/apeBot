@@ -229,9 +229,7 @@ public interface ICommands {
                         if (player.isPaused()) {
                             player.setPaused(false);
                         }
-                        scheduler.clearList();
-                        scheduler.setPosition(0);
-                        initLoadThread(COMMAND.get(1), entry.getValue());
+                        initLoadThread(COMMAND.get(1), entry.getValue(), true);
                         if (!scheduler.isFailed()) {
                             player.playTrack(scheduler.getList().get(scheduler.getPosition()));
                             Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(playEmoji))).block();
@@ -248,14 +246,15 @@ public interface ICommands {
         }
     }
 
-    private static void initLoadThread(String link, PlayerController playerController) {
-        LoadThread loadThread = new LoadThread(link, playerController);
+    private static void initLoadThread(String link, PlayerController playerController, boolean isPositioned) {
+        LoadThread loadThread = new LoadThread(link, playerController, isPositioned);
         loadThread.start();
         try {
             loadThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        playerController.getScheduler().setPositioned(false);
         playerController.getScheduler().setLoaded(false);
     }
 
@@ -337,7 +336,7 @@ public interface ICommands {
                 if (entry.getKey().equals(channel)) {
                     TrackScheduler scheduler = entry.getValue().getScheduler();
                     if (COMMAND.size() == 2) {
-                        initLoadThread(COMMAND.get(1), entry.getValue());
+                        initLoadThread(COMMAND.get(1), entry.getValue(), false);
                         if (!scheduler.isFailed()) {
                             Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(checkEmoji))).block();
                         } else {

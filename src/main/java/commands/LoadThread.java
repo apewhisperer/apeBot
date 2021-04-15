@@ -1,21 +1,25 @@
 package commands;
 
 import player.PlayerController;
-import player.TrackScheduler;
 
 public class LoadThread extends Thread {
 
-    PlayerController playerController;
     String link;
+    PlayerController playerController;
+    boolean isPositioned;
 
-    public LoadThread(String link, PlayerController playerController) {
+    public LoadThread(String link, PlayerController playerController, boolean isPositioned) {
         this.link = link;
         this.playerController = playerController;
+        this.isPositioned = isPositioned;
     }
 
     @Override
     public void run() {
-
+        if (isPositioned) {
+            playerController.getScheduler().clearList();
+            playerController.getScheduler().setPositioned(true);
+        }
         playerController.getPlayerManager().loadItem(link, playerController.getScheduler());
         while (!playerController.getScheduler().isLoaded()) {
             try {
