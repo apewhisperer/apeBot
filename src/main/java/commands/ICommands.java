@@ -208,19 +208,27 @@ public interface ICommands {
                         if (scheduler.getList().size() > 0) {
                             if (player.isPaused()) {
                                 player.setPaused(false);
+                                if (scheduler.isStopped()) {
+                                    scheduler.setStopped(false);
+                                    if (scheduler.getList().size() > 0) {
+                                        player.playTrack(scheduler.getList().get(scheduler.getPosition()).makeClone());
+                                        Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(playEmoji))).block();
+                                        return;
+                                    }
+                                }
                                 Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(playEmoji))).block();
                                 return;
-                            }
-                            if (scheduler.isStopped()) {
+                            } else if (scheduler.isStopped()) {
                                 scheduler.setStopped(false);
                                 if (scheduler.getList().size() > 0) {
                                     player.playTrack(scheduler.getList().get(scheduler.getPosition()).makeClone());
                                     Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(playEmoji))).block();
                                     return;
                                 }
+                            } else if (player.getPlayingTrack() == null) {
+                                player.playTrack(scheduler.getList().get(scheduler.getPosition()));
+                                Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(playEmoji))).block();
                             }
-                            player.playTrack(scheduler.getList().get(scheduler.getPosition()));
-                            Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(playEmoji))).block();
                         } else {
                             Objects.requireNonNull(event.getMessage().getChannel().block())
                                     .createMessage("queue is empty!").subscribe();
