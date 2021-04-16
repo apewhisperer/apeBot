@@ -59,8 +59,7 @@ public class TooltipReader {
                 .replaceAll("<em>", "")
                 .replaceAll("</em>", "")
                 .replaceAll("<strong>", "**")
-                .replaceAll("</strong>", "**")
-        ;
+                .replaceAll("</strong>", "**");
         return converted;
     }
 }
