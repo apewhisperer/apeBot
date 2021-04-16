@@ -6,30 +6,34 @@ import java.util.Random;
 public class DiceRoller {
 
     public static String roll(String message) {
-        String details = "";
-        int[] array = getArray(message);
-        int number = array[0];
-        int dice = array[1];
-        int bonus = array[2];
-        String result;
-        Random random = new Random();
-        int sum = 0;
-        if (number == 0) {
-            int roll = random.nextInt(dice) + 1;
-            sum += roll + bonus;
-            details = details.concat(String.valueOf(roll + bonus));
-        } else {
-            for (int i = 0; i < number; i++) {
+        if (!message.startsWith("diceroll")) {
+            String details = "";
+            int[] array = getArray(message);
+            int number = array[0];
+            int dice = array[1];
+            int bonus = array[2];
+            String result;
+            Random random = new Random();
+            int sum = 0;
+            if (number == 0) {
                 int roll = random.nextInt(dice) + 1;
                 sum += roll + bonus;
                 details = details.concat(String.valueOf(roll + bonus));
-                if (i < number - 1) {
-                    details = details.concat(", ");
+            } else {
+                for (int i = 0; i < number; i++) {
+                    int roll = random.nextInt(dice) + 1;
+                    sum += roll + bonus;
+                    details = details.concat(String.valueOf(roll + bonus));
+                    if (i < number - 1) {
+                        details = details.concat(", ");
+                    }
                 }
             }
+            result = "Roll: `[" + details + "]` Result: " + sum;
+            return result;
+        } else {
+            return "no data provided";
         }
-        result = "Roll: `[" + details + "]` Result: " + sum;
-        return result;
     }
 
     private static int[] getArray(String message) {

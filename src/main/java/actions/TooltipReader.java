@@ -48,7 +48,7 @@ public class TooltipReader {
     private static String filterInput(String tooltip) {
         byte[] bytes = tooltip.getBytes(StandardCharsets.UTF_8);
         String converted = new String(bytes);
-        converted = converted.substring(0, tooltip.indexOf("<p><strong><em>Spell Lists.</em></strong>"));
+        converted = converted.substring(0, converted.indexOf("<p><strong><em>Spell Lists.</em></strong>"));
         converted = converted.replaceAll("<p>", "\n")
                 .replaceAll("</p>", "\n")
                 .replaceAll("<ul><li>", "\n• ")
@@ -58,7 +58,9 @@ public class TooltipReader {
                 .replaceAll("<em>", "")
                 .replaceAll("</em>", "")
                 .replaceAll("<strong>", "**")
-                .replaceAll("</strong>", "**");
+                .replaceAll("</strong>", "**")
+                .replaceAll("Ă˘â‚¬â„˘", "'")
+                .replaceAll("Ă˘â‚¬â€ś", "-");
         return converted;
     }
 }

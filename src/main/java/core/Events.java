@@ -15,7 +15,7 @@ public class Events {
     public static void onMessageCreated(MessageCreateEvent event, Map<String, IExecute> commands) {
         final String CONTENT = event.getMessage().getContent();
         if (CONTENT.matches("^!(\\d+)?d\\d+([+-][d0-9]+)*(;(\\d+)?d\\d+([+-][d0-9]+)*)*;?")) {
-            commands.get("d").execute(event);
+            commands.get("diceroll").execute(event);
             return;
         }
         for (final Map.Entry<String, IExecute> ENTRY : commands.entrySet()) {

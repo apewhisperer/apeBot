@@ -61,7 +61,7 @@ public class Commands implements ICommands {
         COMMANDS.put("tip", event -> {
             ICommands.tip(event);
         });
-        COMMANDS.put("d", event -> {
+        COMMANDS.put("diceroll", event -> {
             ICommands.roll(event);
         });
         COMMANDS.put("surge", event -> {
