@@ -1,6 +1,6 @@
 package core;
 
-import commands.Commands;
+import actions.Commands;
 import discord4j.core.DiscordClientBuilder;
 import discord4j.core.GatewayDiscordClient;
 import discord4j.core.event.domain.lifecycle.ReadyEvent;

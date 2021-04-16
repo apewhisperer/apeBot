@@ -16,19 +16,39 @@ public final class TrackScheduler extends AudioEventAdapter implements AudioLoad
     private final AudioPlayer PLAYER;
     private final Map<Integer, AudioTrack> LIST;
     private int position;
+    private int fadeVolume;
     private boolean isStopped;
     private boolean isLoaded;
     private boolean isFailed;
     private boolean isPositioned;
+    private boolean isFading;
 
     public TrackScheduler(final AudioPlayer PLAYER) {
         this.PLAYER = PLAYER;
         LIST = new HashMap<>();
         position = 0;
+        fadeVolume = 15;
         isStopped = false;
         isLoaded = false;
         isFailed = false;
         isPositioned = false;
+        isFading = false;
+    }
+
+    public boolean isFading() {
+        return isFading;
+    }
+
+    public void setFading(boolean fading) {
+        isFading = fading;
+    }
+
+    public int getFadeVolume() {
+        return fadeVolume;
+    }
+
+    public void setFadeVolume(int fadeVolume) {
+        this.fadeVolume = fadeVolume;
     }
 
     public int getPosition(AudioTrack track) {
