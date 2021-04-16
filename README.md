@@ -1,4 +1,4 @@
-Music and diceroll bot for enhancing your online RPG experience.
+Discord music and diceroll bot for enhancing your online RPG experience.
 
 Steps to make it work:
 1. Acquire a bot token from Discord Developer Portal.
