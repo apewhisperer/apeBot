@@ -106,7 +106,7 @@ public final class TrackScheduler extends AudioEventAdapter implements AudioLoad
                 LIST.put((int) (getList().size() - PLAYLIST.getSelectedTrack().getPosition()), PLAYLIST.getTracks().get((int) (i + PLAYLIST.getSelectedTrack().getPosition())));
             }
         } else {
-            for (int i = getList().size(); i < PLAYLIST.getTracks().size() - getList().size(); i++) {
+            for (int i = getList().size(); i < PLAYLIST.getTracks().size(); i++) {
                 LIST.put(getList().size(), PLAYLIST.getTracks().get(i));
             }
         }

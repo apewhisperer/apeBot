@@ -48,9 +48,14 @@ public interface ICommands {
             for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
                 if (entry.getKey().equals(channel)) {
                     Map<Integer, AudioTrack> list = entry.getValue().getScheduler().getList();
-                    Objects.requireNonNull(event.getMessage().getChannel().block())
-                            .createEmbed(embed -> embed.setColor(Color.DARK_GOLDENROD)
-                                    .setDescription(getList(list, entry.getValue()))).subscribe();
+                    String stringList = getList(list, entry.getValue());
+                    if (stringList.length() > Message.MAX_CONTENT_LENGTH) {
+                        convertToFile(event, stringList);
+                    } else {
+                        Objects.requireNonNull(event.getMessage().getChannel().block())
+                                .createEmbed(embed -> embed.setColor(Color.DARK_GOLDENROD)
+                                        .setDescription(getList(list, entry.getValue()))).subscribe();
+                    }
                 }
             }
         } else {
