@@ -28,6 +28,9 @@ public class Commands implements ICommands {
         COMMANDS.put("bony", event -> {
             ICommands.printBony(event);
         });
+        COMMANDS.put("loop", event -> {
+            ICommands.loop(checkEmoji, event);
+        });
         COMMANDS.put("fade", event -> {
             ICommands.fade(checkEmoji, event);
         });

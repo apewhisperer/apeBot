@@ -22,6 +22,7 @@ public final class TrackScheduler extends AudioEventAdapter implements AudioLoad
     private boolean isFailed;
     private boolean isPositioned;
     private boolean isFading;
+    private boolean isLooped;
 
     public TrackScheduler(final AudioPlayer PLAYER) {
         this.PLAYER = PLAYER;
@@ -33,6 +34,15 @@ public final class TrackScheduler extends AudioEventAdapter implements AudioLoad
         isFailed = false;
         isPositioned = false;
         isFading = false;
+        isLooped = false;
+    }
+
+    public boolean isLooped() {
+        return isLooped;
+    }
+
+    public void setLooped(boolean looped) {
+        isLooped = looped;
     }
 
     public boolean isFading() {
@@ -153,15 +163,19 @@ public final class TrackScheduler extends AudioEventAdapter implements AudioLoad
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
         if (position < LIST.size() + 1) {
-            if (endReason.mayStartNext) {
-                System.out.println("track end" + " pos: " + position);
-                position++;
-                player.playTrack(LIST.get(position));
-            } else if (endReason == AudioTrackEndReason.STOPPED) {
-                System.out.println("track stopped");
-                setStopped(true);
-            } else if (endReason == AudioTrackEndReason.REPLACED) {
-                System.out.println("replaced");
+            if (!isLooped()) {
+                if (endReason.mayStartNext) {
+                    System.out.println("track end" + " pos: " + position);
+                    position++;
+                    player.playTrack(LIST.get(position));
+                } else if (endReason == AudioTrackEndReason.STOPPED) {
+                    System.out.println("track stopped");
+                    setStopped(true);
+                } else if (endReason == AudioTrackEndReason.REPLACED) {
+                    System.out.println("replaced");
+                }
+            } else {
+                player.startTrack(LIST.get(position).makeClone(), true);
             }
         }
     }

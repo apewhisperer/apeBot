@@ -43,6 +43,30 @@ public interface ICommands {
                 .createMessage(BonusContent.bony()).block();
     }
 
+    static void loop(String checkEmoji, MessageCreateEvent event) {
+        final Member MEMBER = event.getMember().orElse(null);
+        VoiceChannel channel = getChannel(MEMBER);
+        if (channel != null) {
+            for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
+                if (entry.getKey().equals(channel)) {
+                    TrackScheduler scheduler = entry.getValue().getScheduler();
+                    if (scheduler.isLooped()) {
+                        scheduler.setLooped(false);
+                        Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(checkEmoji))).block();
+                        return;
+                    } else {
+                        scheduler.setLooped(true);
+                        Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(checkEmoji))).block();
+                        return;
+                    }
+                }
+            }
+        } else {
+            Objects.requireNonNull(event.getMessage().getChannel().block())
+                    .createMessage("join voice channel first").subscribe();
+        }
+    }
+
     static void fade(String checkEmoji, MessageCreateEvent event) {
         final Member MEMBER = event.getMember().orElse(null);
         VoiceChannel channel = getChannel(MEMBER);
@@ -53,9 +77,11 @@ public interface ICommands {
                         FadeThread fadeThread = new FadeThread(entry.getValue());
                         fadeThread.start();
                         Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(checkEmoji))).block();
+                        return;
                     } else {
                         Objects.requireNonNull(event.getMessage().getChannel().block())
                                 .createMessage("fade is already issued!").subscribe();
+                        return;
                     }
                 }
             }
@@ -75,10 +101,12 @@ public interface ICommands {
                     String stringList = getList(list, entry.getValue());
                     if (stringList.length() > Message.MAX_CONTENT_LENGTH) {
                         convertToFile(event, stringList);
+                        return;
                     } else {
                         Objects.requireNonNull(event.getMessage().getChannel().block())
                                 .createEmbed(embed -> embed.setColor(Color.DARK_GOLDENROD)
                                         .setDescription(getList(list, entry.getValue()))).subscribe();
+                        return;
                     }
                 }
             }
@@ -128,9 +156,11 @@ public interface ICommands {
                                 emoji = minusEmoji;
                             }
                             Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(emoji))).block();
+                            return;
                         } else {
                             Objects.requireNonNull(event.getMessage().getChannel().block())
                                     .createMessage("volume must be within 0-100 range").block();
+                            return;
                         }
                     }
                 }
@@ -212,6 +242,7 @@ public interface ICommands {
                     if (!entry.getValue().getPlayer().isPaused()) {
                         entry.getValue().getPlayer().setPaused(true);
                         Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(stopEmoji))).block();
+                        return;
                     }
                 }
             }
@@ -257,10 +288,12 @@ public interface ICommands {
                             } else if (player.getPlayingTrack() == null) {
                                 player.playTrack(scheduler.getList().get(scheduler.getPosition()));
                                 Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(playEmoji))).block();
+                                return;
                             }
                         } else {
                             Objects.requireNonNull(event.getMessage().getChannel().block())
                                     .createMessage("queue is empty!").subscribe();
+                            return;
                         }
                     } else if (COMMAND.size() == 2) {
                         if (player.isPaused()) {
@@ -270,9 +303,11 @@ public interface ICommands {
                         if (!scheduler.isFailed()) {
                             player.playTrack(scheduler.getList().get(scheduler.getPosition()));
                             Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(playEmoji))).block();
+                            return;
                         } else {
                             Objects.requireNonNull(event.getMessage().getChannel().block())
                                     .createMessage("invalid link").subscribe();
+                            return;
                         }
                     }
                 }
@@ -316,6 +351,7 @@ public interface ICommands {
                     entry.getValue().getPlayer().destroy();
                     Commands.channelPlayerMap.remove(entry.getKey(), entry.getValue());
                     channel.sendDisconnectVoiceState().block();
+                    return;
                 }
             }
         } else {
@@ -353,6 +389,7 @@ public interface ICommands {
                 if (entry.getKey().equals(channel)) {
                     entry.getValue().getPlayer().stopTrack();
                     Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(stopEmoji))).block();
+                    return;
                 }
             }
         } else {
@@ -376,9 +413,11 @@ public interface ICommands {
                         initLoadThread(COMMAND.get(1), entry.getValue(), false);
                         if (!scheduler.isFailed()) {
                             Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(checkEmoji))).block();
+                            return;
                         } else {
                             Objects.requireNonNull(event.getMessage().getChannel().block())
                                     .createMessage("invalid link").subscribe();
+                            return;
                         }
                     }
                 }
@@ -404,13 +443,16 @@ public interface ICommands {
                             scheduler.setPosition(scheduler.getPosition() + 1);
                             player.playTrack(scheduler.getList().get(scheduler.getPosition()).makeClone());
                             Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(nextEmoji))).block();
+                            return;
                         } else {
                             Objects.requireNonNull(event.getMessage().getChannel().block())
                                     .createMessage("queue end!").subscribe();
+                            return;
                         }
                     } else {
                         Objects.requireNonNull(event.getMessage().getChannel().block())
                                 .createMessage("queue is empty!").subscribe();
+                        return;
                     }
                 }
             }
@@ -435,13 +477,16 @@ public interface ICommands {
                             scheduler.setPosition(scheduler.getPosition() - 1);
                             player.playTrack(scheduler.getList().get(scheduler.getPosition()).makeClone());
                             Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(nextEmoji))).block();
+                            return;
                         } else {
                             Objects.requireNonNull(event.getMessage().getChannel().block())
                                     .createMessage("queue beginning!").subscribe();
+                            return;
                         }
                     } else {
                         Objects.requireNonNull(event.getMessage().getChannel().block())
                                 .createMessage("queue is empty!").subscribe();
+                        return;
                     }
                 }
             }
