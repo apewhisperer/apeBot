@@ -17,19 +17,19 @@ public class DiceRoller {
             int sum = 0;
             if (number == 0) {
                 int roll = random.nextInt(dice) + 1;
-                sum += roll + bonus;
-                details = details.concat(String.valueOf(roll + bonus));
+                sum += roll;
+                details = details.concat(String.valueOf(roll));
             } else {
                 for (int i = 0; i < number; i++) {
                     int roll = random.nextInt(dice) + 1;
-                    sum += roll + bonus;
-                    details = details.concat(String.valueOf(roll + bonus));
+                    sum += roll;
+                    details = details.concat(String.valueOf(roll));
                     if (i < number - 1) {
                         details = details.concat(", ");
                     }
                 }
             }
-            result = "Roll: `[" + details + "]` Result: " + sum;
+            result = "Roll: `[" + details + "]` Result: " + (sum + bonus);
             return result;
         } else {
             return "no data provided";

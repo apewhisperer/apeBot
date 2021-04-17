@@ -79,7 +79,6 @@ public final class TrackScheduler extends AudioEventAdapter implements AudioLoad
     }
 
     public void clearList() {
-        System.out.println("clearlist");
         LIST.clear();
     }
 
@@ -150,32 +149,28 @@ public final class TrackScheduler extends AudioEventAdapter implements AudioLoad
 
     @Override
     public void noMatches() {
-        System.out.println("no matches found");
+        System.out.println("NO MATCHES FOUND");
     }
 
     @Override
     public void loadFailed(FriendlyException exception) {
         setLoaded(true);
         setFailed(true);
-        System.out.println("track load failed");
+        System.out.println("TRACK LOAD FAILED");
     }
 
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
         if (position < LIST.size() + 1) {
-            if (!isLooped()) {
-                if (endReason.mayStartNext) {
-                    System.out.println("track end" + " pos: " + position);
+            if (endReason.mayStartNext) {
+                if (!isLooped()) {
                     position++;
                     player.playTrack(LIST.get(position));
-                } else if (endReason == AudioTrackEndReason.STOPPED) {
-                    System.out.println("track stopped");
-                    setStopped(true);
-                } else if (endReason == AudioTrackEndReason.REPLACED) {
-                    System.out.println("replaced");
+                } else {
+                    player.playTrack(LIST.get(position).makeClone());
                 }
-            } else {
-                player.startTrack(LIST.get(position).makeClone(), true);
+            } else if (endReason == AudioTrackEndReason.STOPPED) {
+                setStopped(true);
             }
         }
     }
