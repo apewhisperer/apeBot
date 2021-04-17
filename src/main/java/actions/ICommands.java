@@ -43,7 +43,7 @@ public interface ICommands {
                 .createMessage(BonusContent.bony()).block();
     }
 
-    static void loop(String checkEmoji, MessageCreateEvent event) {
+    static void loop(String checkEmoji, String crossEmoji, MessageCreateEvent event) {
         final Member MEMBER = event.getMember().orElse(null);
         VoiceChannel channel = getChannel(MEMBER);
         if (channel != null) {
@@ -52,7 +52,7 @@ public interface ICommands {
                     TrackScheduler scheduler = entry.getValue().getScheduler();
                     if (scheduler.isLooped()) {
                         scheduler.setLooped(false);
-                        Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(checkEmoji))).block();
+                        Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(crossEmoji))).block();
                         return;
                     } else {
                         scheduler.setLooped(true);

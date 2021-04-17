@@ -22,6 +22,7 @@ public class Commands implements ICommands {
         String checkEmoji = "\u2705";
         String nextEmoji = "\u23ED";
         String lastEmoji = "\u23EE";
+        String crossEmoji = "\u274E";
         COMMANDS.put("banana", event -> {
             ICommands.useTts(event);
         });
@@ -29,7 +30,7 @@ public class Commands implements ICommands {
             ICommands.printBony(event);
         });
         COMMANDS.put("loop", event -> {
-            ICommands.loop(checkEmoji, event);
+            ICommands.loop(checkEmoji, crossEmoji, event);
         });
         COMMANDS.put("fade", event -> {
             ICommands.fade(checkEmoji, event);
