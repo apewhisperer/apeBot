@@ -35,7 +35,6 @@ public class PlayerController {
         return PROVIDER;
     }
 
-
     private void init() {
         // This is an optimization strategy that Discord4J can utilize.
         // It is not important to understand

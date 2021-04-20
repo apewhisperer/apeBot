@@ -13,16 +13,6 @@ public class Commands implements ICommands {
 
     public static Map<String, IExecute> getCommands() {
         final Map<String, IExecute> COMMANDS = new HashMap<>();
-        String playEmoji = "\u25B6";
-        String pauseEmoji = "\u23F8";
-        String plusEmoji = "\u2B06";
-        String minusEmoji = "\u2B07";
-        String equalEmoji = "\u2195";
-        String stopEmoji = "\u23F9";
-        String checkEmoji = "\u2705";
-        String nextEmoji = "\u23ED";
-        String lastEmoji = "\u23EE";
-        String crossEmoji = "\u274E";
         COMMANDS.put("banana", event -> {
             ICommands.useTts(event);
         });
@@ -30,19 +20,19 @@ public class Commands implements ICommands {
             ICommands.printBony(event);
         });
         COMMANDS.put("loop", event -> {
-            ICommands.loop(checkEmoji, crossEmoji, event);
+            ICommands.loop(event);
         });
         COMMANDS.put("fade", event -> {
-            ICommands.fade(checkEmoji, event);
+            ICommands.fade(event);
         });
         COMMANDS.put("list", event -> {
             ICommands.printList(event);
         });
         COMMANDS.put("volume", event -> {
-            ICommands.changeVolume(plusEmoji, minusEmoji, equalEmoji, event);
+            ICommands.changeVolume(event);
         });
         COMMANDS.put("vol", event -> {
-            ICommands.changeVolume(plusEmoji, minusEmoji, equalEmoji, event);
+            ICommands.changeVolume(event);
         });
         COMMANDS.put("join", event -> {
             ICommands.join(event);
@@ -54,13 +44,13 @@ public class Commands implements ICommands {
             ICommands.quit(event);
         });
         COMMANDS.put("play", event -> {
-            ICommands.play(playEmoji, event);
+            ICommands.play(event);
         });
         COMMANDS.put("stop", event -> {
-            ICommands.stop(stopEmoji, event);
+            ICommands.stop(event);
         });
         COMMANDS.put("pause", event -> {
-            ICommands.pause(pauseEmoji, event);
+            ICommands.pause(event);
         });
         COMMANDS.put("tip", event -> {
             ICommands.tip(event);
@@ -78,13 +68,13 @@ public class Commands implements ICommands {
             ICommands.printInfo(event);
         });
         COMMANDS.put("queue", event -> {
-            ICommands.queue(checkEmoji, event);
+            ICommands.queue(event);
         });
         COMMANDS.put("next", event -> {
-            ICommands.playNext(nextEmoji, event);
+            ICommands.playNext(event);
         });
         COMMANDS.put("last", event -> {
-            ICommands.playLast(lastEmoji, event);
+            ICommands.playLast(event);
         });
         return COMMANDS;
     }

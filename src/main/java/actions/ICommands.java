@@ -43,7 +43,9 @@ public interface ICommands {
                 .createMessage(BonusContent.bony()).block();
     }
 
-    static void loop(String checkEmoji, String crossEmoji, MessageCreateEvent event) {
+    static void loop(MessageCreateEvent event) {
+        String repeatEmoji = "\uD83D\uDD01";
+        String crossEmoji = "❎";
         final Member MEMBER = event.getMember().orElse(null);
         VoiceChannel channel = getChannel(MEMBER);
         if (channel != null) {
@@ -56,7 +58,7 @@ public interface ICommands {
                         return;
                     } else {
                         scheduler.setLooped(true);
-                        Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(checkEmoji))).block();
+                        Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(repeatEmoji))).block();
                         return;
                     }
                 }
@@ -67,7 +69,8 @@ public interface ICommands {
         }
     }
 
-    static void fade(String checkEmoji, MessageCreateEvent event) {
+    static void fade(MessageCreateEvent event) {
+        String checkEmoji = "✅";
         final Member MEMBER = event.getMember().orElse(null);
         VoiceChannel channel = getChannel(MEMBER);
         if (channel != null) {
@@ -131,7 +134,10 @@ public interface ICommands {
         return stringList;
     }
 
-    static void changeVolume(String plusEmoji, String minusEmoji, String equalEmoji, MessageCreateEvent event) {
+    static void changeVolume(MessageCreateEvent event) {
+        String plusEmoji = "\uD83D\uDD3C";
+        String minusEmoji = "\uD83D\uDD3D";
+        String equalEmoji = "↕";
         final String CONTENT = event.getMessage().getContent();
         final List<String> COMMAND = Arrays.asList(CONTENT.split(" "));
         final Member MEMBER = event.getMember().orElse(null);
@@ -200,7 +206,7 @@ public interface ICommands {
     }
 
     static void roll(MessageCreateEvent event) {
-        String command = DiceRoller.roll(event.getMessage().getContent().substring(1));
+        String command = DiceRoller.roll(event.getMessage().getContent());
         Log.registerEvent(event.getMessage().getContent());
         if (event.getMessage().getContent().length() > 2) {
             if (command.length() > Message.MAX_CONTENT_LENGTH) {
@@ -233,7 +239,8 @@ public interface ICommands {
         }
     }
 
-    static void pause(String stopEmoji, MessageCreateEvent event) {
+    static void pause(MessageCreateEvent event) {
+        String pauseEmoji = "⏸";
         final Member MEMBER = event.getMember().orElse(null);
         VoiceChannel channel = getChannel(MEMBER);
         if (channel != null) {
@@ -241,7 +248,7 @@ public interface ICommands {
                 if (entry.getKey().equals(channel)) {
                     if (!entry.getValue().getPlayer().isPaused()) {
                         entry.getValue().getPlayer().setPaused(true);
-                        Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(stopEmoji))).block();
+                        Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(pauseEmoji))).block();
                         return;
                     }
                 }
@@ -252,7 +259,8 @@ public interface ICommands {
         }
     }
 
-    static void play(String playEmoji, MessageCreateEvent event) {
+    static void play(MessageCreateEvent event) {
+        String playEmoji = "▶";
         final String CONTENT = event.getMessage().getContent();
         final List<String> COMMAND = Arrays.asList(CONTENT.split(" "));
         final Member MEMBER = event.getMember().orElse(null);
@@ -381,7 +389,8 @@ public interface ICommands {
                 }).block();
     }
 
-    static void stop(String stopEmoji, MessageCreateEvent event) {
+    static void stop(MessageCreateEvent event) {
+        String stopEmoji = "⏹";
         final Member MEMBER = event.getMember().orElse(null);
         VoiceChannel channel = getChannel(MEMBER);
         if (channel != null) {
@@ -398,7 +407,8 @@ public interface ICommands {
         }
     }
 
-    static void queue(String checkEmoji, MessageCreateEvent event) {
+    static void queue(MessageCreateEvent event) {
+        String checkEmoji = "✅";
         final String CONTENT = event.getMessage().getContent();
         final List<String> COMMAND = Arrays.asList(CONTENT.split(" "));
         final Member MEMBER = event.getMember().orElse(null);
@@ -428,7 +438,8 @@ public interface ICommands {
         }
     }
 
-    static void playNext(String nextEmoji, MessageCreateEvent event) {
+    static void playNext(MessageCreateEvent event) {
+        String nextEmoji = "⏩";
         final Member MEMBER = event.getMember().orElse(null);
         VoiceChannel channel = getChannel(MEMBER);
         Log.registerEvent(event.getMessage().getContent());
@@ -462,7 +473,8 @@ public interface ICommands {
         }
     }
 
-    static void playLast(String nextEmoji, MessageCreateEvent event) {
+    static void playLast(MessageCreateEvent event) {
+        String lastEmoji = "⏪";
         final Member MEMBER = event.getMember().orElse(null);
         VoiceChannel channel = getChannel(MEMBER);
         Log.registerEvent(event.getMessage().getContent());
@@ -476,7 +488,7 @@ public interface ICommands {
                         if (scheduler.getPosition() - 1 >= 0) {
                             scheduler.setPosition(scheduler.getPosition() - 1);
                             player.playTrack(scheduler.getList().get(scheduler.getPosition()).makeClone());
-                            Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(nextEmoji))).block();
+                            Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(lastEmoji))).block();
                             return;
                         } else {
                             Objects.requireNonNull(event.getMessage().getChannel().block())
