@@ -47,10 +47,10 @@ public interface ICommands {
         String repeatEmoji = "\uD83D\uDD01";
         String crossEmoji = "❎";
         final Member MEMBER = event.getMember().orElse(null);
-        VoiceChannel channel = getChannel(MEMBER);
-        if (channel != null) {
+        final VoiceChannel CHANNEL = getChannel(MEMBER);
+        if (CHANNEL != null) {
             for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
-                if (entry.getKey().equals(channel)) {
+                if (entry.getKey().equals(CHANNEL)) {
                     TrackScheduler scheduler = entry.getValue().getScheduler();
                     if (scheduler.isLooped()) {
                         scheduler.setLooped(false);
@@ -65,17 +65,17 @@ public interface ICommands {
             }
         } else {
             Objects.requireNonNull(event.getMessage().getChannel().block())
-                    .createMessage("join voice channel first").subscribe();
+                    .createMessage("join voice CHANNEL first").subscribe();
         }
     }
 
     static void fade(MessageCreateEvent event) {
         String checkEmoji = "✅";
         final Member MEMBER = event.getMember().orElse(null);
-        VoiceChannel channel = getChannel(MEMBER);
-        if (channel != null) {
+        final VoiceChannel CHANNEL = getChannel(MEMBER);
+        if (CHANNEL != null) {
             for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
-                if (entry.getKey().equals(channel)) {
+                if (entry.getKey().equals(CHANNEL)) {
                     if (!entry.getValue().getScheduler().isFading()) {
                         FadeThread fadeThread = new FadeThread(entry.getValue());
                         fadeThread.start();
@@ -90,16 +90,16 @@ public interface ICommands {
             }
         } else {
             Objects.requireNonNull(event.getMessage().getChannel().block())
-                    .createMessage("join voice channel first").subscribe();
+                    .createMessage("join voice CHANNEL first").subscribe();
         }
     }
 
     static void printList(MessageCreateEvent event) {
         final Member MEMBER = event.getMember().orElse(null);
-        VoiceChannel channel = getChannel(MEMBER);
-        if (channel != null) {
+        final VoiceChannel CHANNEL = getChannel(MEMBER);
+        if (CHANNEL != null) {
             for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
-                if (entry.getKey().equals(channel)) {
+                if (entry.getKey().equals(CHANNEL)) {
                     Map<Integer, AudioTrack> list = entry.getValue().getScheduler().getList();
                     String stringList = getList(list, entry.getValue());
                     if (stringList.length() > Message.MAX_CONTENT_LENGTH) {
@@ -115,7 +115,7 @@ public interface ICommands {
             }
         } else {
             Objects.requireNonNull(event.getMessage().getChannel().block())
-                    .createMessage("join voice channel first").subscribe();
+                    .createMessage("join voice CHANNEL first").subscribe();
         }
     }
 
@@ -141,11 +141,11 @@ public interface ICommands {
         final String CONTENT = event.getMessage().getContent();
         final List<String> COMMAND = Arrays.asList(CONTENT.split(" "));
         final Member MEMBER = event.getMember().orElse(null);
+        final VoiceChannel CHANNEL = getChannel(MEMBER);
         String emoji;
-        VoiceChannel channel = getChannel(MEMBER);
-        if (channel != null) {
+        if (CHANNEL != null) {
             for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
-                if (entry.getKey().equals(channel)) {
+                if (entry.getKey().equals(CHANNEL)) {
                     if (COMMAND.size() > 1) {
                         int levelAfter = Integer.parseInt(COMMAND.get(1));
                         if (levelAfter >= 0 && levelAfter <= 100) {
@@ -173,7 +173,7 @@ public interface ICommands {
             }
         } else {
             Objects.requireNonNull(event.getMessage().getChannel().block())
-                    .createMessage("join voice channel first").subscribe();
+                    .createMessage("join voice CHANNEL first").subscribe();
         }
     }
 
@@ -242,10 +242,10 @@ public interface ICommands {
     static void pause(MessageCreateEvent event) {
         String pauseEmoji = "⏸";
         final Member MEMBER = event.getMember().orElse(null);
-        VoiceChannel channel = getChannel(MEMBER);
-        if (channel != null) {
+        final VoiceChannel CHANNEL = getChannel(MEMBER);
+        if (CHANNEL != null) {
             for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
-                if (entry.getKey().equals(channel)) {
+                if (entry.getKey().equals(CHANNEL)) {
                     if (!entry.getValue().getPlayer().isPaused()) {
                         entry.getValue().getPlayer().setPaused(true);
                         Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(pauseEmoji))).block();
@@ -255,7 +255,7 @@ public interface ICommands {
             }
         } else {
             Objects.requireNonNull(event.getMessage().getChannel().block())
-                    .createMessage("join voice channel first").subscribe();
+                    .createMessage("join voice CHANNEL first").subscribe();
         }
     }
 
@@ -264,12 +264,12 @@ public interface ICommands {
         final String CONTENT = event.getMessage().getContent();
         final List<String> COMMAND = Arrays.asList(CONTENT.split(" "));
         final Member MEMBER = event.getMember().orElse(null);
-        VoiceChannel channel = getChannel(MEMBER);
+        final VoiceChannel CHANNEL = getChannel(MEMBER);
         Log.registerEvent(event.getMessage().getContent());
         join(event);
-        if (channel != null) {
+        if (CHANNEL != null) {
             for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
-                if (entry.getKey().equals(channel)) {
+                if (entry.getKey().equals(CHANNEL)) {
                     TrackScheduler scheduler = entry.getValue().getScheduler();
                     AudioPlayer player = entry.getValue().getPlayer();
                     if (COMMAND.size() == 1) {
@@ -322,7 +322,7 @@ public interface ICommands {
             }
         } else {
             Objects.requireNonNull(event.getMessage().getChannel().block())
-                    .createMessage("join voice channel first").subscribe();
+                    .createMessage("join voice CHANNEL first").subscribe();
         }
     }
 
@@ -341,30 +341,35 @@ public interface ICommands {
     static void join(MessageCreateEvent event) {
         PlayerController playerController = new PlayerController();
         final Member MEMBER = event.getMember().orElse(null);
-        VoiceChannel channel = getChannel(MEMBER);
-        if (channel != null) {
-            if (!Commands.channelPlayerMap.containsKey(channel)) {
-                Commands.channelPlayerMap.put(channel, playerController);
+        final VoiceChannel CHANNEL = getChannel(MEMBER);
+        if (CHANNEL != null) {
+            if (!Commands.channelPlayerMap.containsKey(CHANNEL)) {
+                try {
+                    Commands.channelPlayerMap.put(CHANNEL, playerController);
+                    CHANNEL.join(spec -> spec.setProvider(playerController.getProvider())).block();
+                } catch (Exception e) {
+                    Objects.requireNonNull(event.getMessage().getChannel().block())
+                            .createMessage("unable to join").subscribe();
+                }
             }
-            channel.join(spec -> spec.setProvider(playerController.getProvider())).block();
         }
     }
 
     static void quit(MessageCreateEvent event) {
         final Member MEMBER = event.getMember().orElse(null);
-        VoiceChannel channel = getChannel(MEMBER);
-        if (channel != null) {
+        final VoiceChannel CHANNEL = getChannel(MEMBER);
+        if (CHANNEL != null) {
             for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
-                if (entry.getKey().equals(channel)) {
+                if (entry.getKey().equals(CHANNEL)) {
                     entry.getValue().getPlayer().destroy();
                     Commands.channelPlayerMap.remove(entry.getKey(), entry.getValue());
-                    channel.sendDisconnectVoiceState().block();
+                    CHANNEL.sendDisconnectVoiceState().block();
                     return;
                 }
             }
         } else {
             Objects.requireNonNull(event.getMessage().getChannel().block())
-                    .createMessage("join voice channel first").subscribe();
+                    .createMessage("join voice CHANNEL first").subscribe();
         }
     }
 
@@ -392,10 +397,10 @@ public interface ICommands {
     static void stop(MessageCreateEvent event) {
         String stopEmoji = "⏹";
         final Member MEMBER = event.getMember().orElse(null);
-        VoiceChannel channel = getChannel(MEMBER);
-        if (channel != null) {
+        final VoiceChannel CHANNEL = getChannel(MEMBER);
+        if (CHANNEL != null) {
             for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
-                if (entry.getKey().equals(channel)) {
+                if (entry.getKey().equals(CHANNEL)) {
                     entry.getValue().getPlayer().stopTrack();
                     Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(stopEmoji))).block();
                     return;
@@ -403,7 +408,7 @@ public interface ICommands {
             }
         } else {
             Objects.requireNonNull(event.getMessage().getChannel().block())
-                    .createMessage("join voice channel first").subscribe();
+                    .createMessage("join voice CHANNEL first").subscribe();
         }
     }
 
@@ -412,12 +417,12 @@ public interface ICommands {
         final String CONTENT = event.getMessage().getContent();
         final List<String> COMMAND = Arrays.asList(CONTENT.split(" "));
         final Member MEMBER = event.getMember().orElse(null);
-        VoiceChannel channel = getChannel(MEMBER);
+        final VoiceChannel CHANNEL = getChannel(MEMBER);
         Log.registerEvent(event.getMessage().getContent());
         join(event);
-        if (channel != null) {
+        if (CHANNEL != null) {
             for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
-                if (entry.getKey().equals(channel)) {
+                if (entry.getKey().equals(CHANNEL)) {
                     TrackScheduler scheduler = entry.getValue().getScheduler();
                     if (COMMAND.size() == 2) {
                         initLoadThread(COMMAND.get(1), entry.getValue(), false);
@@ -434,19 +439,19 @@ public interface ICommands {
             }
         } else {
             Objects.requireNonNull(event.getMessage().getChannel().block())
-                    .createMessage("join voice channel first").subscribe();
+                    .createMessage("join voice CHANNEL first").subscribe();
         }
     }
 
     static void playNext(MessageCreateEvent event) {
         String nextEmoji = "⏩";
         final Member MEMBER = event.getMember().orElse(null);
-        VoiceChannel channel = getChannel(MEMBER);
+        final VoiceChannel CHANNEL = getChannel(MEMBER);
         Log.registerEvent(event.getMessage().getContent());
         join(event);
-        if (channel != null) {
+        if (CHANNEL != null) {
             for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
-                if (entry.getKey().equals(channel)) {
+                if (entry.getKey().equals(CHANNEL)) {
                     TrackScheduler scheduler = entry.getValue().getScheduler();
                     AudioPlayer player = entry.getValue().getPlayer();
                     if (scheduler.getList().size() > 0) {
@@ -469,19 +474,19 @@ public interface ICommands {
             }
         } else {
             Objects.requireNonNull(event.getMessage().getChannel().block())
-                    .createMessage("join voice channel first").subscribe();
+                    .createMessage("join voice CHANNEL first").subscribe();
         }
     }
 
     static void playLast(MessageCreateEvent event) {
         String lastEmoji = "⏪";
         final Member MEMBER = event.getMember().orElse(null);
-        VoiceChannel channel = getChannel(MEMBER);
+        final VoiceChannel CHANNEL = getChannel(MEMBER);
         Log.registerEvent(event.getMessage().getContent());
         join(event);
-        if (channel != null) {
+        if (CHANNEL != null) {
             for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
-                if (entry.getKey().equals(channel)) {
+                if (entry.getKey().equals(CHANNEL)) {
                     TrackScheduler scheduler = entry.getValue().getScheduler();
                     AudioPlayer player = entry.getValue().getPlayer();
                     if (scheduler.getList().size() > 0) {
@@ -504,7 +509,7 @@ public interface ICommands {
             }
         } else {
             Objects.requireNonNull(event.getMessage().getChannel().block())
-                    .createMessage("join voice channel first").subscribe();
+                    .createMessage("join voice CHANNEL first").subscribe();
         }
     }
 }
