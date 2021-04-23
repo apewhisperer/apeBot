@@ -65,7 +65,7 @@ public interface ICommands {
             }
         } else {
             Objects.requireNonNull(event.getMessage().getChannel().block())
-                    .createMessage("join voice CHANNEL first").subscribe();
+                    .createMessage("join voice channel first").subscribe();
         }
     }
 
@@ -90,7 +90,7 @@ public interface ICommands {
             }
         } else {
             Objects.requireNonNull(event.getMessage().getChannel().block())
-                    .createMessage("join voice CHANNEL first").subscribe();
+                    .createMessage("join voice channel first").subscribe();
         }
     }
 
@@ -115,7 +115,7 @@ public interface ICommands {
             }
         } else {
             Objects.requireNonNull(event.getMessage().getChannel().block())
-                    .createMessage("join voice CHANNEL first").subscribe();
+                    .createMessage("join voice channel first").subscribe();
         }
     }
 
@@ -173,7 +173,7 @@ public interface ICommands {
             }
         } else {
             Objects.requireNonNull(event.getMessage().getChannel().block())
-                    .createMessage("join voice CHANNEL first").subscribe();
+                    .createMessage("join voice channel first").subscribe();
         }
     }
 
@@ -255,7 +255,7 @@ public interface ICommands {
             }
         } else {
             Objects.requireNonNull(event.getMessage().getChannel().block())
-                    .createMessage("join voice CHANNEL first").subscribe();
+                    .createMessage("join voice channel first").subscribe();
         }
     }
 
@@ -322,7 +322,7 @@ public interface ICommands {
             }
         } else {
             Objects.requireNonNull(event.getMessage().getChannel().block())
-                    .createMessage("join voice CHANNEL first").subscribe();
+                    .createMessage("join voice channel first").subscribe();
         }
     }
 
@@ -369,7 +369,7 @@ public interface ICommands {
             }
         } else {
             Objects.requireNonNull(event.getMessage().getChannel().block())
-                    .createMessage("join voice CHANNEL first").subscribe();
+                    .createMessage("join voice channel first").subscribe();
         }
     }
 
@@ -408,7 +408,7 @@ public interface ICommands {
             }
         } else {
             Objects.requireNonNull(event.getMessage().getChannel().block())
-                    .createMessage("join voice CHANNEL first").subscribe();
+                    .createMessage("join voice channel first").subscribe();
         }
     }
 
@@ -439,7 +439,7 @@ public interface ICommands {
             }
         } else {
             Objects.requireNonNull(event.getMessage().getChannel().block())
-                    .createMessage("join voice CHANNEL first").subscribe();
+                    .createMessage("join voice channel first").subscribe();
         }
     }
 
@@ -474,7 +474,7 @@ public interface ICommands {
             }
         } else {
             Objects.requireNonNull(event.getMessage().getChannel().block())
-                    .createMessage("join voice CHANNEL first").subscribe();
+                    .createMessage("join voice channel first").subscribe();
         }
     }
 
@@ -509,7 +509,7 @@ public interface ICommands {
             }
         } else {
             Objects.requireNonNull(event.getMessage().getChannel().block())
-                    .createMessage("join voice CHANNEL first").subscribe();
+                    .createMessage("join voice channel first").subscribe();
         }
     }
 }
