@@ -3,7 +3,7 @@ package actions;
 public class Info {
 
     static String description() {
-        return "Discord bot for playing D&D, written in Java and created using [Discord4j](https://discord4j.com/) version 3.1.5 library.";
+        return "Discord bot for playing Dungeons&Dragons online, written in Java and created using [Discord4j](https://discord4j.com/) version 3.1.5 library.";
     }
 
     static String gitHub() {

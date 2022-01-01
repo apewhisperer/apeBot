@@ -38,11 +38,6 @@ public interface ICommands {
                 }).block();
     }
 
-    static void printBony(MessageCreateEvent event) {
-        Objects.requireNonNull(event.getMessage().getChannel().block())
-                .createMessage(BonusContent.bony()).block();
-    }
-
     static void loop(MessageCreateEvent event) {
         String repeatEmoji = "\uD83D\uDD01";
         String crossEmoji = "❎";

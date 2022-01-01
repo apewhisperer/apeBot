@@ -16,9 +16,6 @@ public class Commands implements ICommands {
         COMMANDS.put("banana", event -> {
             ICommands.useTts(event);
         });
-        COMMANDS.put("bony", event -> {
-            ICommands.printBony(event);
-        });
         COMMANDS.put("loop", event -> {
             ICommands.loop(event);
         });

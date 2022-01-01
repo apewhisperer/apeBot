@@ -8,13 +8,17 @@ import java.util.Date;
 public class Log {
 
     static void registerEvent(String command) {
-        File log = new File("log.txt");
-        FileWriter fileWriter = null;
-        if (log.length() > 100000) {
-            log.delete();
+        File logFile = new File("log.txt");
+        boolean isOverLimit = logFile.length() > 100000;
+        if (isOverLimit) {
+            eraseFile(logFile);
         }
+        writeToFile(null, command, logFile);
+    }
+
+    static void writeToFile(FileWriter fileWriter, String command, File logFile) {
         try {
-            fileWriter = new FileWriter(log, true);
+            fileWriter = new FileWriter(logFile, true);
             Date date = new Date();
             fileWriter.append(date.toString())
                     .append(" ")
@@ -30,5 +34,9 @@ public class Log {
                 ex.printStackTrace();
             }
         }
+    }
+
+    private static void eraseFile(File logFile) {
+        logFile.delete();
     }
 }

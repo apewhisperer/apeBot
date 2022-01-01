@@ -6,10 +6,8 @@ import java.util.Random;
 public class DiceRoller {
 
     public static String roll(String message) {
-
         String rest = message;
         int sum = 0;
-
         while (rest.length() > 1 && containsOperator(rest)) {
             int evaluateResult = evaluate(rest.substring(lastOperatorIndex(rest)));
             if (evaluateResult == -1) {
@@ -51,10 +49,10 @@ public class DiceRoller {
 
     public static ArrayList<Integer> convertMainDice(String diceString) {
         ArrayList<Integer> resultArray = new ArrayList<>();
+        Random random = new Random();
         int[] array = getArray(diceString);
         int number = array[0];
         int dice = array[1];
-        Random random = new Random();
         int sum = 0;
         if (dice > 1) {
             if (number == 0) {
@@ -76,13 +74,13 @@ public class DiceRoller {
     }
 
     public static String convertRestDice(String preDice) {
-        char operator = preDice.charAt(0);
         String diceString = preDice.substring(1);
+        Random random = new Random();
+        char operator = preDice.charAt(0);
         int[] array = getArray(diceString);
         int number = array[0];
         int dice = array[1];
         int sum = 0;
-        Random random = new Random();
         if (dice > 1) {
             if (number == 0) {
                 int roll = random.nextInt(dice) + 1;
@@ -100,9 +98,9 @@ public class DiceRoller {
     }
 
     private static int[] getArray(String diceString) {
-        int[] array = new int[2];
         ArrayList<Character> diceNumberArray = new ArrayList<>();
         ArrayList<Character> diceTypeArray = new ArrayList<>();
+        int[] array = new int[2];
         char[] diceNumberChar = diceString.substring(0, (diceString.indexOf("d"))).toCharArray();
         char[] diceTypeChar = diceString.substring(diceString.indexOf("d") + 1).toCharArray();
         for (char c : diceNumberChar) {

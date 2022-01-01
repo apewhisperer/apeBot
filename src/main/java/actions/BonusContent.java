@@ -4,24 +4,10 @@ import java.util.Random;
 
 public class BonusContent {
 
-    static String bony() {
-        return "https://media0.giphy.com/media/XfIeqsmLNJvFEndzMf/giphy.gif?cid=ecf05e47nqctj1e31vxeuur0ijx1j9d63p6nb7v0m6nmzx9l&rid=giphy.gif";
-    }
-
-    static String esteban() {
-        return "**ahora hablo en serio**";
-    }
-
-    static String dumb() {
-        return "no.";
-    }
-
     static String wildMagicSurge() {
 
         Log.registerEvent("!surge");
-
         Random random = new Random();
-
         int roll = random.nextInt(100) + 1;
 
         switch (roll) {
@@ -96,7 +82,7 @@ public class BonusContent {
                 return "You cast Levitate on yourself.";
             case 47:
             case 48:
-                return "A unicorn controlled by the DM appears in a space within 5 feet of you, then disappears 1 minute later. \t";
+                return "A unicorn controlled by the DM appears in a space within 5 feet of you, then disappears 1 minute later.";
             case 49:
             case 50:
                 return "You can't speak for the next minute. Whenever you try, pink bubbles float out of your mouth.";
