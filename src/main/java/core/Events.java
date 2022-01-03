@@ -24,7 +24,7 @@ public class Events {
                 break;
             }
         }
-        if (CONTENT.contains("820365062300500059") || CONTENT.contains("@apeBot")) {
+        if (CONTENT.contains("820365062300500059")) {
             Objects.requireNonNull(event.getMessage().getChannel().block()).
                     createMessage(event.getMessage().getAuthor().get().getMention() + " type this:`!help`").block();
         }
