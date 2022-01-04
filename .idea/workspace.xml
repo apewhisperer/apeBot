@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="apeBot:jar" />
+    </artifacts-to-build>
+  </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="004d12d3-f94f-45a0-b3e1-6fff0d246f92" name="Changes" comment="reorganize tree">
+      <change afterPath="$PROJECT_DIR$/src/main/java/functions/ExecuterInterface.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/apeBot_jar/.env" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/apeBot_jar/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/apeBot_jar/apeBot.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/apeBot_jar/apeBot.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/functions/BonusContent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/functions/ExtendedFunctions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/functions/Commands.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/functions/Commands.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/functions/ICommands.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/functions/CommandsInterface.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/functions/threads/FadeThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/functions/threads/FadeThread.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/functions/ICommands$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/functions/ICommands$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/functions/ICommands$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/functions/ICommands$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/functions/ICommands.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/functions/ICommands.class" afterDir="false" />
+    </list>
+    <list id="e6604cc4-8ee1-43a1-94d1-81a0dda0b49b" name="noncommit" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="GitToolBoxStore">
+    <option name="projectConfigVersion" value="4" />
+  </component>
+  <component name="ProjectId" id="23D3b5Nu1q3Obuuz9OklI59DQuk" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/out/artifacts/apeBot_jar/apeBot.jar" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="configurable.group.appearance" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="functions" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\user\IdeaProjects\apeBot\.idea" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JAR Application.apeBot.jar">
+    <configuration name="DiscordBot" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="11" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="bot.DiscordBot" />
+      <module name="apeBot" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="bot.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="apeBot.jar" type="JarApplication">
+      <option name="JAR_PATH" value="$PROJECT_DIR$/out/artifacts/apeBot_jar/apeBot.jar" />
+      <option name="WORKING_DIRECTORY" value="C:\Users\user\IdeaProjects\apeBot" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <method v="2">
+        <option name="BuildArtifacts" enabled="true">
+          <artifact name="apeBot:jar" />
+        </option>
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.DiscordBot" />
+      <item itemvalue="JAR Application.apeBot.jar" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.DiscordBot" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="004d12d3-f94f-45a0-b3e1-6fff0d246f92" name="Changes" comment="" />
+      <changelist id="e6604cc4-8ee1-43a1-94d1-81a0dda0b49b" name="noncommit" comment="" />
+      <created>1641254900786</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1641254900786</updated>
+    </task>
+    <task id="LOCAL-00001" summary="clean up gitignore">
+      <created>1641255525130</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1641255525130</updated>
+    </task>
+    <task id="LOCAL-00002" summary="update gitignore">
+      <created>1641255715874</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1641255715874</updated>
+    </task>
+    <task id="LOCAL-00003" summary="update jar">
+      <created>1641256860951</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1641256860951</updated>
+    </task>
+    <task id="LOCAL-00004" summary="reorganize tree">
+      <created>1641303204137</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1641303204137</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="clean up gitignore" />
+    <MESSAGE value="update gitignore" />
+    <MESSAGE value="update jar" />
+    <MESSAGE value="reorganize tree" />
+    <option name="LAST_COMMIT_MESSAGE" value="reorganize tree" />
+  </component>
+</project>
