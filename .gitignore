@@ -1,3 +1,5 @@
+.idea
+.gitattributes
+.gitignore
 /log.txt
-out/artifacts/apeBot_jar/log.txt
-out/artifacts/apeBot_jar/.env
+out/*
