@@ -1,4 +1,4 @@
 Manifest-Version: 1.0
-Main-Class: core.DiscordBot
+Main-Class: bot.DiscordBot
 Multi-Release: true
 
