@@ -12,7 +12,7 @@ import java.util.Objects;
 
 public class DiscordBot {
 
-    private static final Map<String, IExecute> COMMANDS;
+    private static final Map<String, ExecuteInterface> COMMANDS;
 
     static {
         COMMANDS = Commands.getCommands();

@@ -12,13 +12,13 @@ import java.util.Objects;
 
 public class Events {
 
-    public static void onMessageCreated(MessageCreateEvent event, Map<String, IExecute> commands) {
+    public static void onMessageCreated(MessageCreateEvent event, Map<String, ExecuteInterface> commands) {
         final String CONTENT = event.getMessage().getContent();
         if (CONTENT.matches("^!(\\d+)?d\\d+([+-][d0-9]+)*(;(\\d+)?d\\d+([+-][d0-9]+)*)*;?")) {
             commands.get("diceroll").execute(event);
             return;
         }
-        for (final Map.Entry<String, IExecute> ENTRY : commands.entrySet()) {
+        for (final Map.Entry<String, ExecuteInterface> ENTRY : commands.entrySet()) {
             if (CONTENT.startsWith('!' + ENTRY.getKey())) {
                 ENTRY.getValue().execute(event);
                 break;

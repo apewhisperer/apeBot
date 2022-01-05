@@ -3,6 +3,6 @@ package bot;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 
 @FunctionalInterface
-public interface IExecute {
+public interface ExecuteInterface {
     void execute(MessageCreateEvent event);
 }

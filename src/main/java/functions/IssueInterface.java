@@ -20,8 +20,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-public interface ExecuterInterface {
-    static void executeLoop(MessageCreateEvent event, String repeatEmoji, String crossEmoji, VoiceChannel CHANNEL) {
+public interface IssueInterface {
+    static void issueLoop(MessageCreateEvent event, String repeatEmoji, String crossEmoji, VoiceChannel CHANNEL) {
         for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
             if (entry.getKey().equals(CHANNEL)) {
                 TrackScheduler scheduler = entry.getValue().getScheduler();
@@ -38,7 +38,7 @@ public interface ExecuterInterface {
         }
     }
 
-    static void executeFade(MessageCreateEvent event, String checkEmoji, VoiceChannel CHANNEL) {
+    static void issueFade(MessageCreateEvent event, String checkEmoji, VoiceChannel CHANNEL) {
         for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
             if (entry.getKey().equals(CHANNEL)) {
                 if (!entry.getValue().getScheduler().isFading()) {
@@ -55,7 +55,7 @@ public interface ExecuterInterface {
         }
     }
 
-    static void executePrintList(MessageCreateEvent event, VoiceChannel CHANNEL) {
+    static void issuePrintList(MessageCreateEvent event, VoiceChannel CHANNEL) {
         for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
             if (entry.getKey().equals(CHANNEL)) {
                 Map<Integer, AudioTrack> list = entry.getValue().getScheduler().getList();
@@ -73,7 +73,7 @@ public interface ExecuterInterface {
         }
     }
 
-    static void executeChangeVolume(MessageCreateEvent event, String plusEmoji, String minusEmoji, String equalEmoji, List<String> COMMAND, VoiceChannel CHANNEL) {
+    static void issueChangeVolume(MessageCreateEvent event, String plusEmoji, String minusEmoji, String equalEmoji, List<String> COMMAND, VoiceChannel CHANNEL) {
         String emoji;
         for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
             if (entry.getKey().equals(CHANNEL)) {
@@ -104,7 +104,7 @@ public interface ExecuterInterface {
         }
     }
 
-    static void executeRoll(MessageCreateEvent event, String command) {
+    static void issueRoll(MessageCreateEvent event, String command) {
         if (command.length() > Message.MAX_CONTENT_LENGTH) {
             convertToFile(event, command);
         } else {
@@ -113,7 +113,7 @@ public interface ExecuterInterface {
         }
     }
 
-    static void executeTip(MessageCreateEvent event, String command) {
+    static void issueTip(MessageCreateEvent event, String command) {
         if (command.length() > Message.MAX_CONTENT_LENGTH) {
             convertToFile(event, command);
         } else {
@@ -135,7 +135,7 @@ public interface ExecuterInterface {
                 }).block();
     }
 
-    static void executePause(MessageCreateEvent event, String pauseEmoji, VoiceChannel CHANNEL) {
+    static void issuePause(MessageCreateEvent event, String pauseEmoji, VoiceChannel CHANNEL) {
         for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
             if (entry.getKey().equals(CHANNEL)) {
                 if (!entry.getValue().getPlayer().isPaused()) {
@@ -147,7 +147,7 @@ public interface ExecuterInterface {
         }
     }
 
-    static void executePlay(MessageCreateEvent event, String playEmoji, List<String> COMMAND, VoiceChannel CHANNEL) {
+    static void issuePlay(MessageCreateEvent event, String playEmoji, List<String> COMMAND, VoiceChannel CHANNEL) {
         for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
             if (entry.getKey().equals(CHANNEL)) {
                 TrackScheduler scheduler = entry.getValue().getScheduler();
@@ -214,7 +214,7 @@ public interface ExecuterInterface {
         playerController.getScheduler().setLoaded(false);
     }
 
-    static void executeJoin(MessageCreateEvent event, PlayerController playerController, VoiceChannel CHANNEL) {
+    static void issueJoin(MessageCreateEvent event, PlayerController playerController, VoiceChannel CHANNEL) {
         if (!Commands.channelPlayerMap.containsKey(CHANNEL)) {
             try {
                 Commands.channelPlayerMap.put(CHANNEL, playerController);
@@ -226,7 +226,7 @@ public interface ExecuterInterface {
         }
     }
 
-    static void executeQuit(VoiceChannel CHANNEL) {
+    static void issueQuit(VoiceChannel CHANNEL) {
         for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
             if (entry.getKey().equals(CHANNEL)) {
                 entry.getValue().getPlayer().destroy();
@@ -237,7 +237,7 @@ public interface ExecuterInterface {
         }
     }
 
-    static void executeStop(MessageCreateEvent event, String stopEmoji, VoiceChannel CHANNEL) {
+    static void issueStop(MessageCreateEvent event, String stopEmoji, VoiceChannel CHANNEL) {
         for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
             if (entry.getKey().equals(CHANNEL)) {
                 entry.getValue().getPlayer().stopTrack();
@@ -247,7 +247,7 @@ public interface ExecuterInterface {
         }
     }
 
-    static void executeQueue(MessageCreateEvent event, String checkEmoji, List<String> COMMAND, VoiceChannel CHANNEL) {
+    static void issueQueue(MessageCreateEvent event, String checkEmoji, List<String> COMMAND, VoiceChannel CHANNEL) {
         for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
             if (entry.getKey().equals(CHANNEL)) {
                 TrackScheduler scheduler = entry.getValue().getScheduler();
@@ -266,7 +266,7 @@ public interface ExecuterInterface {
         }
     }
 
-    static void executePlayNext(MessageCreateEvent event, String nextEmoji, VoiceChannel CHANNEL) {
+    static void issuePlayNext(MessageCreateEvent event, String nextEmoji, VoiceChannel CHANNEL) {
         for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
             if (entry.getKey().equals(CHANNEL)) {
                 TrackScheduler scheduler = entry.getValue().getScheduler();
@@ -291,7 +291,7 @@ public interface ExecuterInterface {
         }
     }
 
-    static void executePlayLast(MessageCreateEvent event, String lastEmoji, VoiceChannel CHANNEL) {
+    static void issuePlayLast(MessageCreateEvent event, String lastEmoji, VoiceChannel CHANNEL) {
         for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
             if (entry.getKey().equals(CHANNEL)) {
                 TrackScheduler scheduler = entry.getValue().getScheduler();

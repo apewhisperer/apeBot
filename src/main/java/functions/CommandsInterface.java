@@ -9,8 +9,6 @@ import discord4j.core.spec.MessageCreateSpec;
 import discord4j.rest.util.Color;
 import player.PlayerController;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +17,7 @@ import java.util.function.Consumer;
 
 import static functions.Help.*;
 
-public interface CommandsInterface extends ExecuterInterface {
+public interface CommandsInterface extends IssueInterface {
 
     static void useTts(MessageCreateEvent event) {
         Objects.requireNonNull(event.getMessage().getChannel().block())
@@ -38,7 +36,7 @@ public interface CommandsInterface extends ExecuterInterface {
         final Member MEMBER = event.getMember().orElse(null);
         final VoiceChannel CHANNEL = getChannel(MEMBER);
         if (CHANNEL != null) {
-            ExecuterInterface.executeLoop(event, repeatEmoji, crossEmoji, CHANNEL);
+            IssueInterface.issueLoop(event, repeatEmoji, crossEmoji, CHANNEL);
         } else {
             Objects.requireNonNull(event.getMessage().getChannel().block())
                     .createMessage("join voice channel first").subscribe();
@@ -51,7 +49,7 @@ public interface CommandsInterface extends ExecuterInterface {
         final Member MEMBER = event.getMember().orElse(null);
         final VoiceChannel CHANNEL = getChannel(MEMBER);
         if (CHANNEL != null) {
-            ExecuterInterface.executeFade(event, checkEmoji, CHANNEL);
+            IssueInterface.issueFade(event, checkEmoji, CHANNEL);
         } else {
             Objects.requireNonNull(event.getMessage().getChannel().block())
                     .createMessage("join voice channel first").subscribe();
@@ -63,7 +61,7 @@ public interface CommandsInterface extends ExecuterInterface {
         final Member MEMBER = event.getMember().orElse(null);
         final VoiceChannel CHANNEL = getChannel(MEMBER);
         if (CHANNEL != null) {
-            ExecuterInterface.executePrintList(event, CHANNEL);
+            IssueInterface.issuePrintList(event, CHANNEL);
         } else {
             Objects.requireNonNull(event.getMessage().getChannel().block())
                     .createMessage("join voice channel first").subscribe();
@@ -96,7 +94,7 @@ public interface CommandsInterface extends ExecuterInterface {
         final VoiceChannel CHANNEL = getChannel(MEMBER);
         String emoji;
         if (CHANNEL != null) {
-            ExecuterInterface.executeChangeVolume(event, plusEmoji, minusEmoji, equalEmoji, COMMAND, CHANNEL);
+            IssueInterface.issueChangeVolume(event, plusEmoji, minusEmoji, equalEmoji, COMMAND, CHANNEL);
         } else {
             Objects.requireNonNull(event.getMessage().getChannel().block())
                     .createMessage("join voice channel first").subscribe();
@@ -136,7 +134,7 @@ public interface CommandsInterface extends ExecuterInterface {
         String command = DiceRoller.roll(event.getMessage().getContent());
         Log.registerEvent(event.getMessage().getContent());
         if (event.getMessage().getContent().length() > 2) {
-            ExecuterInterface.executeRoll(event, command);
+            IssueInterface.issueRoll(event, command);
         } else {
             Objects.requireNonNull(event.getMessage().getChannel().block())
                     .createMessage("value required").block();
@@ -147,7 +145,7 @@ public interface CommandsInterface extends ExecuterInterface {
         String command = TooltipReader.getTooltip(event.getMessage().getContent().substring(5));
         Log.registerEvent(event.getMessage().getContent());
         if (event.getMessage().getContent().length() > 5) {
-            ExecuterInterface.executeTip(event, command);
+            IssueInterface.issueTip(event, command);
         } else {
             Objects.requireNonNull(event.getMessage().getChannel().block())
                     .createMessage("name required").block();
@@ -159,7 +157,7 @@ public interface CommandsInterface extends ExecuterInterface {
         final Member MEMBER = event.getMember().orElse(null);
         final VoiceChannel CHANNEL = getChannel(MEMBER);
         if (CHANNEL != null) {
-            ExecuterInterface.executePause(event, pauseEmoji, CHANNEL);
+            IssueInterface.issuePause(event, pauseEmoji, CHANNEL);
         } else {
             Objects.requireNonNull(event.getMessage().getChannel().block())
                     .createMessage("join voice channel first").subscribe();
@@ -175,7 +173,7 @@ public interface CommandsInterface extends ExecuterInterface {
         Log.registerEvent(event.getMessage().getContent());
         join(event);
         if (CHANNEL != null) {
-            ExecuterInterface.executePlay(event, playEmoji, COMMAND, CHANNEL);
+            IssueInterface.issuePlay(event, playEmoji, COMMAND, CHANNEL);
         } else {
             Objects.requireNonNull(event.getMessage().getChannel().block())
                     .createMessage("join voice channel first").subscribe();
@@ -187,7 +185,7 @@ public interface CommandsInterface extends ExecuterInterface {
         final Member MEMBER = event.getMember().orElse(null);
         final VoiceChannel CHANNEL = getChannel(MEMBER);
         if (CHANNEL != null) {
-            ExecuterInterface.executeJoin(event, playerController, CHANNEL);
+            IssueInterface.issueJoin(event, playerController, CHANNEL);
         }
     }
 
@@ -195,7 +193,7 @@ public interface CommandsInterface extends ExecuterInterface {
         final Member MEMBER = event.getMember().orElse(null);
         final VoiceChannel CHANNEL = getChannel(MEMBER);
         if (CHANNEL != null) {
-            ExecuterInterface.executeQuit(CHANNEL);
+            IssueInterface.issueQuit(CHANNEL);
         } else {
             Objects.requireNonNull(event.getMessage().getChannel().block())
                     .createMessage("join voice channel first").subscribe();
@@ -217,7 +215,7 @@ public interface CommandsInterface extends ExecuterInterface {
         final Member MEMBER = event.getMember().orElse(null);
         final VoiceChannel CHANNEL = getChannel(MEMBER);
         if (CHANNEL != null) {
-            ExecuterInterface.executeStop(event, stopEmoji, CHANNEL);
+            IssueInterface.issueStop(event, stopEmoji, CHANNEL);
         } else {
             Objects.requireNonNull(event.getMessage().getChannel().block())
                     .createMessage("join voice channel first").subscribe();
@@ -233,7 +231,7 @@ public interface CommandsInterface extends ExecuterInterface {
         Log.registerEvent(event.getMessage().getContent());
         join(event);
         if (CHANNEL != null) {
-            ExecuterInterface.executeQueue(event, checkEmoji, COMMAND, CHANNEL);
+            IssueInterface.issueQueue(event, checkEmoji, COMMAND, CHANNEL);
         } else {
             Objects.requireNonNull(event.getMessage().getChannel().block())
                     .createMessage("join voice channel first").subscribe();
@@ -247,7 +245,7 @@ public interface CommandsInterface extends ExecuterInterface {
         Log.registerEvent(event.getMessage().getContent());
         join(event);
         if (CHANNEL != null) {
-            ExecuterInterface.executePlayNext(event, nextEmoji, CHANNEL);
+            IssueInterface.issuePlayNext(event, nextEmoji, CHANNEL);
         } else {
             Objects.requireNonNull(event.getMessage().getChannel().block())
                     .createMessage("join voice channel first").subscribe();
@@ -261,7 +259,7 @@ public interface CommandsInterface extends ExecuterInterface {
         Log.registerEvent(event.getMessage().getContent());
         join(event);
         if (CHANNEL != null) {
-            ExecuterInterface.executePlayLast(event, lastEmoji, CHANNEL);
+            IssueInterface.issuePlayLast(event, lastEmoji, CHANNEL);
         } else {
             Objects.requireNonNull(event.getMessage().getChannel().block())
                     .createMessage("join voice channel first").subscribe();

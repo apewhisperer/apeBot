@@ -1,6 +1,6 @@
 package functions;
 
-import bot.IExecute;
+import bot.ExecuteInterface;
 import discord4j.core.object.entity.channel.VoiceChannel;
 import player.PlayerController;
 
@@ -11,8 +11,8 @@ public class Commands implements CommandsInterface {
 
     static Map<VoiceChannel, PlayerController> channelPlayerMap = new HashMap<>();
 
-    public static Map<String, IExecute> getCommands() {
-        final Map<String, IExecute> COMMANDS = new HashMap<>();
+    public static Map<String, ExecuteInterface> getCommands() {
+        final Map<String, ExecuteInterface> COMMANDS = new HashMap<>();
         COMMANDS.put("banana", event -> {
             CommandsInterface.useTts(event);
         });
