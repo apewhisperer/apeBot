@@ -179,7 +179,7 @@ public interface CommandsInterface extends IssueInterface {
         final Member MEMBER = event.getMember().orElse(null);
         final VoiceChannel CHANNEL = getChannel(MEMBER);
         Log.registerEvent(event.getMessage().getContent());
-        join(event);
+        join(event, true);
         if (CHANNEL != null) {
             IssueInterface.issuePlay(event, playEmoji, COMMAND, CHANNEL);
         } else {
@@ -188,11 +188,13 @@ public interface CommandsInterface extends IssueInterface {
         }
     }
 
-    static void join(MessageCreateEvent event) {
+    static void join(MessageCreateEvent event, boolean isPlay) {
         PlayerController playerController = new PlayerController();
         final Member MEMBER = event.getMember().orElse(null);
         final VoiceChannel CHANNEL = getChannel(MEMBER);
-        Log.registerEvent(event.getMessage().getContent());
+        if (!isPlay) {
+            Log.registerEvent(event.getMessage().getContent());
+        }
         if (CHANNEL != null) {
             IssueInterface.issueJoin(event, playerController, CHANNEL);
         }
@@ -240,7 +242,7 @@ public interface CommandsInterface extends IssueInterface {
         final Member MEMBER = event.getMember().orElse(null);
         final VoiceChannel CHANNEL = getChannel(MEMBER);
         Log.registerEvent(event.getMessage().getContent());
-        join(event);
+        join(event, true);
         if (CHANNEL != null) {
             IssueInterface.issueQueue(event, checkEmoji, COMMAND, CHANNEL);
         } else {
@@ -254,7 +256,7 @@ public interface CommandsInterface extends IssueInterface {
         final Member MEMBER = event.getMember().orElse(null);
         final VoiceChannel CHANNEL = getChannel(MEMBER);
         Log.registerEvent(event.getMessage().getContent());
-        join(event);
+        join(event, true);
         if (CHANNEL != null) {
             IssueInterface.issuePlayNext(event, nextEmoji, CHANNEL);
         } else {
@@ -268,7 +270,7 @@ public interface CommandsInterface extends IssueInterface {
         final Member MEMBER = event.getMember().orElse(null);
         final VoiceChannel CHANNEL = getChannel(MEMBER);
         Log.registerEvent(event.getMessage().getContent());
-        join(event);
+        join(event, true);
         if (CHANNEL != null) {
             IssueInterface.issuePlayLast(event, lastEmoji, CHANNEL);
         } else {

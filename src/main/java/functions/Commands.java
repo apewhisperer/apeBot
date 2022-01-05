@@ -32,7 +32,7 @@ public class Commands implements CommandsInterface {
             CommandsInterface.changeVolume(event);
         });
         COMMANDS.put("join", event -> {
-            CommandsInterface.join(event);
+            CommandsInterface.join(event, false);
         });
         COMMANDS.put("leave", event -> {
             CommandsInterface.quit(event);
