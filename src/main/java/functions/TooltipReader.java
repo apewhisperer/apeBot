@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
 public class TooltipReader {
@@ -46,19 +47,7 @@ public class TooltipReader {
     }
 
     private static String filterInput(String tooltip) {
-        byte[] bytes = tooltip.getBytes(StandardCharsets.UTF_8);
-        String converted = new String(bytes);
-        converted = converted.substring(0, converted.indexOf("<p><strong><em>Spell Lists.</em></strong>"));
-        converted = converted.replaceAll("<p>", "\n")
-                .replaceAll("</p>", "\n")
-                .replaceAll("<ul><li>", "\n• ")
-                .replaceAll("</li></ul>", "\n")
-                .replaceAll("<br>", "\n")
-                .replaceAll("<br />", "\n")
-                .replaceAll("<em>", "")
-                .replaceAll("</em>", "")
-                .replaceAll("<strong>", "**")
-                .replaceAll("</strong>", "**");
-        return converted;
+        ByteBuffer byteBuffer = StandardCharsets.UTF_8.encode(tooltip);
+        return StandardCharsets.UTF_8.decode(byteBuffer).toString();
     }
 }

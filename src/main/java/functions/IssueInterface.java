@@ -21,6 +21,7 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 public interface IssueInterface {
+
     static void issueLoop(MessageCreateEvent event, String repeatEmoji, String crossEmoji, VoiceChannel CHANNEL) {
         for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
             if (entry.getKey().equals(CHANNEL)) {
