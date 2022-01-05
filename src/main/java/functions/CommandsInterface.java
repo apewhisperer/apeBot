@@ -20,6 +20,7 @@ import static functions.Help.*;
 public interface CommandsInterface extends IssueInterface {
 
     static void useTts(MessageCreateEvent event) {
+        Log.registerEvent(event.getMessage().getContent());
         Objects.requireNonNull(event.getMessage().getChannel().block())
                 .createMessage(new Consumer<MessageCreateSpec>() {
                     @Override
@@ -35,6 +36,7 @@ public interface CommandsInterface extends IssueInterface {
         String crossEmoji = "❎";
         final Member MEMBER = event.getMember().orElse(null);
         final VoiceChannel CHANNEL = getChannel(MEMBER);
+        Log.registerEvent(event.getMessage().getContent());
         if (CHANNEL != null) {
             IssueInterface.issueLoop(event, repeatEmoji, crossEmoji, CHANNEL);
         } else {
@@ -48,6 +50,7 @@ public interface CommandsInterface extends IssueInterface {
         String checkEmoji = "✅";
         final Member MEMBER = event.getMember().orElse(null);
         final VoiceChannel CHANNEL = getChannel(MEMBER);
+        Log.registerEvent(event.getMessage().getContent());
         if (CHANNEL != null) {
             IssueInterface.issueFade(event, checkEmoji, CHANNEL);
         } else {
@@ -60,6 +63,7 @@ public interface CommandsInterface extends IssueInterface {
     static void printList(MessageCreateEvent event) {
         final Member MEMBER = event.getMember().orElse(null);
         final VoiceChannel CHANNEL = getChannel(MEMBER);
+        Log.registerEvent(event.getMessage().getContent());
         if (CHANNEL != null) {
             IssueInterface.issuePrintList(event, CHANNEL);
         } else {
@@ -92,7 +96,7 @@ public interface CommandsInterface extends IssueInterface {
         final List<String> COMMAND = Arrays.asList(CONTENT.split(" "));
         final Member MEMBER = event.getMember().orElse(null);
         final VoiceChannel CHANNEL = getChannel(MEMBER);
-        String emoji;
+        Log.registerEvent(event.getMessage().getContent());
         if (CHANNEL != null) {
             IssueInterface.issueChangeVolume(event, plusEmoji, minusEmoji, equalEmoji, COMMAND, CHANNEL);
         } else {
@@ -103,6 +107,7 @@ public interface CommandsInterface extends IssueInterface {
 
 
     static void printInfo(MessageCreateEvent event) {
+        Log.registerEvent(event.getMessage().getContent());
         Objects.requireNonNull(event.getMessage().getChannel().block())
                 .createEmbed(embed -> embed.setColor(Color.DARK_GOLDENROD)
                         .setTitle(Info.gitHub())
@@ -113,6 +118,7 @@ public interface CommandsInterface extends IssueInterface {
     }
 
     static void help(MessageCreateEvent event) {
+        Log.registerEvent(event.getMessage().getContent());
         Objects.requireNonNull(event.getMessage().getChannel().block())
                 .createEmbed(embed -> embed.setColor(Color.DARK_GOLDENROD)
                         .setTitle("Commands:")
@@ -125,6 +131,7 @@ public interface CommandsInterface extends IssueInterface {
     }
 
     static void surge(MessageCreateEvent event) {
+        Log.registerEvent(event.getMessage().getContent());
         Objects.requireNonNull(event.getMessage().getChannel().block())
                 .createEmbed(embed -> embed.setColor(Color.DARK_GOLDENROD)
                         .setDescription(ExtendedFunctions.wildMagicSurge())).subscribe();
@@ -156,6 +163,7 @@ public interface CommandsInterface extends IssueInterface {
         String pauseEmoji = "⏸";
         final Member MEMBER = event.getMember().orElse(null);
         final VoiceChannel CHANNEL = getChannel(MEMBER);
+        Log.registerEvent(event.getMessage().getContent());
         if (CHANNEL != null) {
             IssueInterface.issuePause(event, pauseEmoji, CHANNEL);
         } else {
@@ -184,6 +192,7 @@ public interface CommandsInterface extends IssueInterface {
         PlayerController playerController = new PlayerController();
         final Member MEMBER = event.getMember().orElse(null);
         final VoiceChannel CHANNEL = getChannel(MEMBER);
+        Log.registerEvent(event.getMessage().getContent());
         if (CHANNEL != null) {
             IssueInterface.issueJoin(event, playerController, CHANNEL);
         }
@@ -192,6 +201,7 @@ public interface CommandsInterface extends IssueInterface {
     static void quit(MessageCreateEvent event) {
         final Member MEMBER = event.getMember().orElse(null);
         final VoiceChannel CHANNEL = getChannel(MEMBER);
+        Log.registerEvent(event.getMessage().getContent());
         if (CHANNEL != null) {
             IssueInterface.issueQuit(CHANNEL);
         } else {
@@ -214,6 +224,7 @@ public interface CommandsInterface extends IssueInterface {
         String stopEmoji = "⏹";
         final Member MEMBER = event.getMember().orElse(null);
         final VoiceChannel CHANNEL = getChannel(MEMBER);
+        Log.registerEvent(event.getMessage().getContent());
         if (CHANNEL != null) {
             IssueInterface.issueStop(event, stopEmoji, CHANNEL);
         } else {
