@@ -23,7 +23,7 @@ import java.util.function.Consumer;
 
 public interface IssueInterface {
 
-    static Map<VoiceChannel, PlayerController> channelPlayerMap = new HashMap<>();
+    Map<VoiceChannel, PlayerController> channelPlayerMap = new HashMap<>();
 
     static void issueLoop(MessageCreateEvent event, String repeatEmoji, String crossEmoji, VoiceChannel CHANNEL) {
         for (Map.Entry<VoiceChannel, PlayerController> entry : channelPlayerMap.entrySet()) {
