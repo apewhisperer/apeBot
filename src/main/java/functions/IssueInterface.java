@@ -15,6 +15,7 @@ import player.TrackScheduler;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -22,8 +23,10 @@ import java.util.function.Consumer;
 
 public interface IssueInterface {
 
+    static Map<VoiceChannel, PlayerController> channelPlayerMap = new HashMap<>();
+
     static void issueLoop(MessageCreateEvent event, String repeatEmoji, String crossEmoji, VoiceChannel CHANNEL) {
-        for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
+        for (Map.Entry<VoiceChannel, PlayerController> entry : channelPlayerMap.entrySet()) {
             if (entry.getKey().equals(CHANNEL)) {
                 TrackScheduler scheduler = entry.getValue().getScheduler();
                 if (scheduler.isLooped()) {
@@ -40,7 +43,7 @@ public interface IssueInterface {
     }
 
     static void issueFade(MessageCreateEvent event, String checkEmoji, VoiceChannel CHANNEL) {
-        for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
+        for (Map.Entry<VoiceChannel, PlayerController> entry : channelPlayerMap.entrySet()) {
             if (entry.getKey().equals(CHANNEL)) {
                 if (!entry.getValue().getScheduler().isFading()) {
                     FadeThread fadeThread = new FadeThread(entry.getValue());
@@ -57,7 +60,7 @@ public interface IssueInterface {
     }
 
     static void issuePrintList(MessageCreateEvent event, VoiceChannel CHANNEL) {
-        for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
+        for (Map.Entry<VoiceChannel, PlayerController> entry : channelPlayerMap.entrySet()) {
             if (entry.getKey().equals(CHANNEL)) {
                 Map<Integer, AudioTrack> list = entry.getValue().getScheduler().getList();
                 String stringList = CommandsInterface.getList(list, entry.getValue());
@@ -76,7 +79,7 @@ public interface IssueInterface {
 
     static void issueChangeVolume(MessageCreateEvent event, String plusEmoji, String minusEmoji, String equalEmoji, List<String> COMMAND, VoiceChannel CHANNEL) {
         String emoji;
-        for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
+        for (Map.Entry<VoiceChannel, PlayerController> entry : channelPlayerMap.entrySet()) {
             if (entry.getKey().equals(CHANNEL)) {
                 if (COMMAND.size() > 1) {
                     int levelAfter = Integer.parseInt(COMMAND.get(1));
@@ -137,7 +140,7 @@ public interface IssueInterface {
     }
 
     static void issuePause(MessageCreateEvent event, String pauseEmoji, VoiceChannel CHANNEL) {
-        for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
+        for (Map.Entry<VoiceChannel, PlayerController> entry : channelPlayerMap.entrySet()) {
             if (entry.getKey().equals(CHANNEL)) {
                 if (!entry.getValue().getPlayer().isPaused()) {
                     entry.getValue().getPlayer().setPaused(true);
@@ -149,7 +152,7 @@ public interface IssueInterface {
     }
 
     static void issuePlay(MessageCreateEvent event, String playEmoji, List<String> COMMAND, VoiceChannel CHANNEL) {
-        for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
+        for (Map.Entry<VoiceChannel, PlayerController> entry : channelPlayerMap.entrySet()) {
             if (entry.getKey().equals(CHANNEL)) {
                 TrackScheduler scheduler = entry.getValue().getScheduler();
                 AudioPlayer player = entry.getValue().getPlayer();
@@ -216,9 +219,9 @@ public interface IssueInterface {
     }
 
     static void issueJoin(MessageCreateEvent event, PlayerController playerController, VoiceChannel CHANNEL) {
-        if (!Commands.channelPlayerMap.containsKey(CHANNEL)) {
+        if (!channelPlayerMap.containsKey(CHANNEL)) {
             try {
-                Commands.channelPlayerMap.put(CHANNEL, playerController);
+                channelPlayerMap.put(CHANNEL, playerController);
                 CHANNEL.join(spec -> spec.setProvider(playerController.getProvider())).block();
             } catch (Exception e) {
                 Objects.requireNonNull(event.getMessage().getChannel().block())
@@ -228,10 +231,10 @@ public interface IssueInterface {
     }
 
     static void issueQuit(VoiceChannel CHANNEL) {
-        for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
+        for (Map.Entry<VoiceChannel, PlayerController> entry : channelPlayerMap.entrySet()) {
             if (entry.getKey().equals(CHANNEL)) {
                 entry.getValue().getPlayer().destroy();
-                Commands.channelPlayerMap.remove(entry.getKey(), entry.getValue());
+                channelPlayerMap.remove(entry.getKey(), entry.getValue());
                 CHANNEL.sendDisconnectVoiceState().block();
                 return;
             }
@@ -239,7 +242,7 @@ public interface IssueInterface {
     }
 
     static void issueStop(MessageCreateEvent event, String stopEmoji, VoiceChannel CHANNEL) {
-        for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
+        for (Map.Entry<VoiceChannel, PlayerController> entry : channelPlayerMap.entrySet()) {
             if (entry.getKey().equals(CHANNEL)) {
                 entry.getValue().getPlayer().stopTrack();
                 Objects.requireNonNull(event.getMessage().addReaction(ReactionEmoji.unicode(stopEmoji))).block();
@@ -249,7 +252,7 @@ public interface IssueInterface {
     }
 
     static void issueQueue(MessageCreateEvent event, String checkEmoji, List<String> COMMAND, VoiceChannel CHANNEL) {
-        for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
+        for (Map.Entry<VoiceChannel, PlayerController> entry : channelPlayerMap.entrySet()) {
             if (entry.getKey().equals(CHANNEL)) {
                 TrackScheduler scheduler = entry.getValue().getScheduler();
                 if (COMMAND.size() == 2) {
@@ -268,7 +271,7 @@ public interface IssueInterface {
     }
 
     static void issuePlayNext(MessageCreateEvent event, String nextEmoji, VoiceChannel CHANNEL) {
-        for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
+        for (Map.Entry<VoiceChannel, PlayerController> entry : channelPlayerMap.entrySet()) {
             if (entry.getKey().equals(CHANNEL)) {
                 TrackScheduler scheduler = entry.getValue().getScheduler();
                 AudioPlayer player = entry.getValue().getPlayer();
@@ -293,7 +296,7 @@ public interface IssueInterface {
     }
 
     static void issuePlayLast(MessageCreateEvent event, String lastEmoji, VoiceChannel CHANNEL) {
-        for (Map.Entry<VoiceChannel, PlayerController> entry : Commands.channelPlayerMap.entrySet()) {
+        for (Map.Entry<VoiceChannel, PlayerController> entry : channelPlayerMap.entrySet()) {
             if (entry.getKey().equals(CHANNEL)) {
                 TrackScheduler scheduler = entry.getValue().getScheduler();
                 AudioPlayer player = entry.getValue().getPlayer();

@@ -9,8 +9,6 @@ import java.util.Map;
 
 public class Commands implements CommandsInterface {
 
-    static Map<VoiceChannel, PlayerController> channelPlayerMap = new HashMap<>();
-
     public static Map<String, ExecuteInterface> getCommands() {
         final Map<String, ExecuteInterface> COMMANDS = new HashMap<>();
         COMMANDS.put("banana", event -> {
