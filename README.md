@@ -1,6 +1,6 @@
-Discord music and diceroll bot for enhancing your online RPG experience.
+# Discord music and diceroll bot for enhancing your online RPG experience.
 
-How to run:
+# How to run:
 
 1. Acquire a bot token from Discord Developer Portal.
 2. Invite your bot to a Discord guild (Send_Messages + Read_Message_History + Connect + Speak + Add_Reactions permissions are required).
@@ -8,4 +8,4 @@ How to run:
 4. Run the apeBot.bat file from apeBot_jar directory.
 5. Type "!help" in a channel and have fun with your bot!
 
-<i>NOTE: This application uses UTF-8 encoding and it is best to run it with such.</i>
+```DISCLAIMER: This application uses UTF-8 encoding and it is best to run it with such.```
