@@ -8,4 +8,4 @@
 4. Run the apeBot.bat file from apeBot_jar directory.
 5. Type "!help" in a channel and have fun with your bot!
 
-```DISCLAIMER: This application uses UTF-8 encoding and it is best to run it with such.```
+```DISCLAIMER```: This application uses UTF-8 encoding and it is best to run it with such.
